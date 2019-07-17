@@ -6,6 +6,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as reducers from './state/store/reducers';
 import createEventReporterMiddleware from './state/middleware/event-reporter';
+import metadataMiddleWare from './state/middleware/metadata';
 import NavigationHandler from './components/navigation-handler';
 import Results from './views/results';
 import './index.css';
@@ -42,7 +43,6 @@ const initialize = ({
   // }
   // language,
 } = {}) => {
-
   // TODO: Sessionstorage loading.
   const cachedState = undefined;
 
@@ -54,25 +54,26 @@ const initialize = ({
     cachedState,
     composeWithDevTools(
       applyMiddleware(
+        metadataMiddleWare, 
         eventReporterMiddleware,
       )
     )
-  )
+  );
 
   const App = () => {
     return (
-      <Provider store={ store }>
+      <Provider store={store}>
         <NavigationHandler>
           <Results />
         </NavigationHandler>
       </Provider>
     );
-  }
+  };
 
   ReactDOM.render(<App />, document.getElementById('NCI-search-results-root'));
-}
+};
 
-if(process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   initialize();
 }
 
