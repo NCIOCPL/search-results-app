@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as reducers from './state/store/reducers';
-import createEventReporterMiddleware from './state/middleware/eventReporter';
+import createEventReporterMiddleware from './state/middleware/event-reporter';
 import Results from './views/results';
 import './index.css';
 
