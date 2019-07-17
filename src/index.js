@@ -1,6 +1,10 @@
 import 'react-app-polyfill/ie11';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import * as reducers from './state/store/reducers';
 import './index.css';
 
 const initialize = (
@@ -36,8 +40,22 @@ const initialize = (
   // language,
 ) => {
 
+  const store = createStore(
+    combineReducers(reducers),
+    // cachedState,
+    // composeWithDevTools(
+    //   applyMiddleware(
+
+    //   )
+    // )
+  )
+
   const App = () => {
-    return <div>Search Results App</div>;
+    return (
+      <Provider store={ store }>
+        <div>Search Results App</div>
+      </Provider>
+    );
   }
 
   ReactDOM.render(<App />, document.getElementById('NCI-search-results-root'));
