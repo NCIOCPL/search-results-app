@@ -6,6 +6,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as reducers from './state/store/reducers';
 import createEventReporterMiddleware from './state/middleware/eventReporter';
+import Results from './views/results';
 import './index.css';
 
 const initialize = ({
@@ -60,7 +61,7 @@ const initialize = ({
   const App = () => {
     return (
       <Provider store={ store }>
-        <div>Search Results App</div>
+        <Results />
       </Provider>
     );
   }
