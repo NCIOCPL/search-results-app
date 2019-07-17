@@ -5,13 +5,14 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as reducers from './state/store/reducers';
+import createEventReporterMiddleware from './state/middleware/eventReporter';
 import './index.css';
 
-const initialize = (
+const initialize = ({
   // appId = '@@/DEFAULT_APP_ID',
   // useSessionStorage = true,
   // rootId = 'r4r-root',
-  // eventHandler,
+  eventHandler,
   // services = {
   //   search: {
   //     ?endpoint [/Search],
@@ -38,16 +39,22 @@ const initialize = (
   //   }
   // }
   // language,
-) => {
+} = {}) => {
+
+  // TODO: Sessionstorage loading.
+  const cachedState = undefined;
+
+  // Set up middlewares.
+  const eventReporterMiddleware = createEventReporterMiddleware(eventHandler);
 
   const store = createStore(
     combineReducers(reducers),
-    // cachedState,
-    // composeWithDevTools(
-    //   applyMiddleware(
-
-    //   )
-    // )
+    cachedState,
+    composeWithDevTools(
+      applyMiddleware(
+        eventReporterMiddleware,
+      )
+    )
   )
 
   const App = () => {
