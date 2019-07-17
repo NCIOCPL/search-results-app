@@ -1,0 +1,1 @@
+All react components that do not represent a route/view go here. Components that are exclusively used by a single parent component should be stored in a subdirectory of its parent component.
