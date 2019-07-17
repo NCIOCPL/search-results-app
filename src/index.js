@@ -14,7 +14,7 @@ import './index.css';
 const initialize = ({
   // appId = '@@/DEFAULT_APP_ID',
   // useSessionStorage = true,
-  // rootId = 'r4r-root',
+  rootId = 'NCI-search-results-root',
   eventHandler,
   // services = {
   //   search: {
@@ -70,7 +70,7 @@ const initialize = ({
     );
   };
 
-  ReactDOM.render(<App />, document.getElementById('NCI-search-results-root'));
+  ReactDOM.render(<App />, document.getElementById(rootId));
 };
 
 if (process.env.NODE_ENV !== 'production') {
