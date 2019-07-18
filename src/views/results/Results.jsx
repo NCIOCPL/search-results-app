@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import querystring from 'querystring';
 import {
   Spinner,
   Pager,
@@ -9,6 +8,9 @@ import {
   Dictionary,
   BestBet,
 } from '../../components';
+import {
+  parseSearchParams,
+} from '../../utilities';
 
 // TEMP: Used for mocking state while doing UI dev
 import { updateResults } from '../../state/store/results';
@@ -16,17 +18,12 @@ import mocks from '../../state/mocks';
 
 // TODO: Move to utility functions
 const getSearchParams = () => {
-  return window.location.search;
+  return mocks["tumor"].searchParams // window.location.search;
 }
 
-// TODO: Move to utility functions and flesh oput, or remove altogether.
-const validateQueryString = unvalidatedQueryString => unvalidatedQueryString;
-
 // TODO: Placeholder for primary controller/router/instigator of API calls
-const callAllTheAPIs = (queryString) => {
-  const parsedQueryString = querystring.parse(queryString);    
-  // Validate query string through helper
-  const validatedQueryString = validateQueryString(parsedQueryString);
+const callAllTheAPIs = (searchParamsString) => {
+  const searchParams = parseSearchParams(searchParamsString);
   return { type: 'placeholder' }
 }
 
@@ -40,53 +37,54 @@ const Results = () => {
   // Grab query string:
   // We do this outside of the hook so that the hook is reactive only to changes in the querystring (we don't want
   // to make API calls unnecessarily when the searchparams haven't changed on rerenders)
-  const queryString = getSearchParams();
+  const searchParamsString = getSearchParams();
+
   useEffect(() => {
     // Fire off API calls
-    dispatch(callAllTheAPIs(queryString));
-  }, [dispatch, queryString])
+    dispatch(callAllTheAPIs(searchParamsString));
+  }, [dispatch, searchParamsString])
 
-  // TEMP FOR DEV
+  // TODO: Parse, format, process, normalize selected state using utility helpers as much as possible
+  const currentSearch = useSelector(store => store.results.search);
+  const currentBestBets = useSelector(store => store.results.bestBets);
+  const currentDictionary = useSelector(store => store.results.dictionary);
+
+  // ######### TEMP FOR DEV ###########
   useEffect(() =>  {
     dispatch(updateResults('search', mocks["tumor"].search));
     dispatch(updateResults('bestBets', mocks["tumor"].bestBets));
     dispatch(updateResults('dictionary', mocks["tumor"].dictionary));
   }, [dispatch])
-  // Read store state
-  //    Select editor state:
-  //      Select current results
-  const currentSearch = useSelector(store => store.results.search);
-  //      Select current bestbets
-  const currentBestBets = useSelector(store => store.results.bestBets);
-  //      Select current dictionary
-  const currentDictionary = useSelector(store => store.results.dictionary);
+  // ##################################
 
-  // TODO: Remove hard coded. Derive from searchParams
-  const currentPage = 1;
+  const searchParams = parseSearchParams(searchParamsString);
+  const {
+    swKeyword: searchTerm,
+    page,
+    pageunit,
+    Offset: offset,
+  } = searchParams;
 
-  // Parse, format, process, normalize selected state using utility helpers as much as possible
+  // Calculate the numbers used for the results info displays.
+  const resultsStart = 1 + offset;
+  // If we are on the last page of results, the range might be less than the offset
+  // This breaks if we don't have a current search (total) yet so we delay the calculation by wrapping it in a function call or component...
+  const getResultsEnd = (step, total) => step <= total ? step : total;
   
-  // Render outline
-  //    If store has current results for search - display
-  //          If is first page of search results
-  //             If a store has current best bets - display best bets
-  //                If store has current dictionary - display dictionary
-  //          else If store has current dictionary - display dictionary
-  //    else SPINNER!!
   return(
     currentSearch
       ? (
           <div>
-            <p>Results for: xxx</p>
+            <h3>Results for: { searchTerm }</h3>
             {
-              // This won't work. We'll need to track whether we are still fetching bestBets.
+              // This won't work perfectly. We'll need to track whether we are still fetching bestBets.
               // Cases where the page is 1 but best bets hasn't returned yet will render the dictionary
               // and potentially pop in the best bets later.
-              (currentPage === 1 && currentBestBets) 
+              (page === 1 && currentBestBets) 
                 ? 
                   currentBestBets.map((bestBet, bestBetIndex) => {
                     return (
-                      <div>
+                      <div key={ bestBetIndex }>
                         <BestBet>
                           {
                             (bestBetIndex === 0 && currentDictionary) && 
@@ -100,11 +98,11 @@ const Results = () => {
                   currentDictionary  && 
                     <Dictionary />
             }
-            <div>Results x-y of z for: xxx</div>
+            <h4>Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { searchTerm }</h4>
             <ResultsList />
-            <div>Results x-y of z</div>
+            <h2>Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults }</h2>
             <Pager />
-            <div>Z Results found for: xxx</div>
+            <h4>{ currentSearch.totalResults } Results found for: { searchTerm }</h4>
             <SearchBox />
           </div>
         )

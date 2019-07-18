@@ -1,7 +1,7 @@
 // Mock js objects for intial dev purposes.
 
 const tumor = {
-  searchParams: "?swKeyword=tumor&page=1&pageunit=10&Offset=0",
+  searchParams: "swKeyword=tumor&page=1&pageunit=10&Offset=0",
   search: {
     results: [
       {
