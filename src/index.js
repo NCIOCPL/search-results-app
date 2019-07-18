@@ -7,6 +7,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import * as reducers from './state/store/reducers';
 import createEventReporterMiddleware from './state/middleware/event-reporter';
 import metadataMiddleWare from './state/middleware/metadata';
+import { createBrowserHistory } from 'history';
+import createHistoryMiddleware from './state/middleware/history';
 import NavigationHandler from './components/navigation-handler';
 import Results from './views/results';
 import './index.css';
@@ -49,12 +51,16 @@ const initialize = ({
   // Set up middlewares.
   const eventReporterMiddleware = createEventReporterMiddleware(eventHandler);
 
+  const history = createBrowserHistory();
+  const historyMiddleware = createHistoryMiddleware(history);
+
   const store = createStore(
     combineReducers(reducers),
     cachedState,
     composeWithDevTools(
       applyMiddleware(
-        metadataMiddleWare, 
+        metadataMiddleWare,
+        historyMiddleware,
         eventReporterMiddleware,
       )
     )
