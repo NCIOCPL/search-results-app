@@ -1,17 +1,26 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { callAllTheAPIS } from './state/stuff/actions';
 import querystring from 'querystring';
+import {
+  Spinner,
+  Pager,
+  ResultsList,
+  SearchBox,
+} from '../../components';
 
+// TEMP: Used for mocking state while doing UI dev
 import { updateResults } from '../../state/store/results';
 import mocks from '../../state/mocks';
 
+// TODO: Move to utility functions
 const getSearchParams = () => {
   return window.location.search;
 }
 
+// TODO: Move to utility functions and flesh oput, or remove altogether.
 const validateQueryString = unvalidatedQueryString => unvalidatedQueryString;
 
+// TODO: Placeholder for primary controller/router/instigator of API calls
 const callAllTheAPIs = (queryString) => {
   const parsedQueryString = querystring.parse(queryString);    
   // Validate query string through helper
@@ -97,14 +106,14 @@ const Results = () => {
                     )
             }
             <div>Results x-y of z for: xxx</div>
-            <div>RESULTS LIST</div>
+            <ResultsList />
             <div>Results x-y of z</div>
-            <div>Pager</div>
+            <Pager />
             <div>Z Results found for: xxx</div>
-            <div>Search Box</div>
+            <SearchBox />
           </div>
         )
-      : <div>Spinner</div>
+      : <Spinner />
   )
 }
 
