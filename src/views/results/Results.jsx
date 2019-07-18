@@ -7,6 +7,7 @@ import {
   ResultsList,
   SearchBox,
   Dictionary,
+  BestBet,
 } from '../../components';
 
 // TEMP: Used for mocking state while doing UI dev
@@ -86,11 +87,12 @@ const Results = () => {
                   currentBestBets.map((bestBet, bestBetIndex) => {
                     return (
                       <div>
-                        <div>Best Bet</div>
-                        {
-                          (bestBetIndex === 0 && currentDictionary) && 
-                            <Dictionary />
-                        }
+                        <BestBet>
+                          {
+                            (bestBetIndex === 0 && currentDictionary) && 
+                              <Dictionary />
+                          }
+                        </BestBet>
                       </div>
                     )
                   })
