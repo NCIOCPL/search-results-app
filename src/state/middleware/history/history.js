@@ -9,7 +9,7 @@
 const createHistoryMiddleware = history => store => next => action => {
   next(action)
   // The history object needs to be updated before recording the change to ensure they are synchronized.
-  if(action.type == '@@router/location_change'){
+  if(action.type === '@@router/location_change'){
     // Call changes to history based on action payload
     const { method } = action.payload;
   

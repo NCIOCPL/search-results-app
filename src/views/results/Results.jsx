@@ -8,6 +8,7 @@ import {
   Dictionary,
   BestBet,
 } from '../../components';
+import { initiateSearchAction } from '../../state/store/actions';
 import {
   parseSearchParams,
 } from '../../utilities';
@@ -20,12 +21,6 @@ import mocks from '../../state/mocks';
 // TODO: Move to utility functions
 const getSearchParams = () => {
   return mocks["tumor"].searchParams // window.location.search;
-}
-
-// TODO: Placeholder for primary controller/router/instigator of API calls
-const callAllTheAPIs = (searchParamsString) => {
-  const searchParams = parseSearchParams(searchParamsString);
-  return { type: 'placeholder' }
 }
 
 const Results = () => {
@@ -42,7 +37,7 @@ const Results = () => {
 
   useEffect(() => {
     // Fire off API calls
-    dispatch(callAllTheAPIs(searchParamsString));
+    initiateSearchAction(dispatch)(searchParamsString);
   }, [dispatch, searchParamsString])
 
   // TODO: Parse, format, process, normalize selected state using utility helpers as much as possible

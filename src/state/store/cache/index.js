@@ -1,5 +1,7 @@
 export const initialState = {
-
+  search: null,
+  bestBets: null,
+  dictionary: null,
 }
 
 export const reducer = (state = initialState, action) => {

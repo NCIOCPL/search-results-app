@@ -7,6 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import * as reducers from './state/store/reducers';
 import createEventReporterMiddleware from './state/middleware/event-reporter';
 import metadataMiddleWare from './state/middleware/metadata';
+import cacheMiddleware from './state/middleware/cache';
 import { createBrowserHistory } from 'history';
 import createHistoryMiddleware from './state/middleware/history';
 import NavigationHandler from './components/navigation-handler';
@@ -60,6 +61,7 @@ const initialize = ({
     composeWithDevTools(
       applyMiddleware(
         metadataMiddleWare,
+        cacheMiddleware,
         historyMiddleware,
         eventReporterMiddleware,
       )
