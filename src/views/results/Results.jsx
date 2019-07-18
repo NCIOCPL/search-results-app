@@ -6,6 +6,7 @@ import {
   Pager,
   ResultsList,
   SearchBox,
+  Dictionary,
 } from '../../components';
 
 // TEMP: Used for mocking state while doing UI dev
@@ -87,23 +88,15 @@ const Results = () => {
                       <div>
                         <div>Best Bet</div>
                         {
-                          (bestBetIndex === 0 && currentDictionary) &&
-                            (
-                              <div>
-                                Dictionary
-                              </div>
-                            )
+                          (bestBetIndex === 0 && currentDictionary) && 
+                            <Dictionary />
                         }
                       </div>
                     )
                   })
                 :
-                  currentDictionary 
-                    && (
-                      <div>
-                        Dictionary
-                      </div>
-                    )
+                  currentDictionary  && 
+                    <Dictionary />
             }
             <div>Results x-y of z for: xxx</div>
             <ResultsList />
