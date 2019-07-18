@@ -86,25 +86,27 @@ const tumor = {
     ],
     totalResults: 8699,
   },
-  bestBets: {
-    id: '23423',
-    name: 'R01 - Category Name',
-    weight: 11,
-    results: [
+  bestBets: [
       {
-        title: 'Grant Mechanisms and Descriptions',
-        link: 'http://deainfo.nci.nih.gov/flash/awards.htm',
-        description:
-          'List of grant mechanisms, with descriptions and links to associated program announcements.',
-      },
-      {
-        title: 'Research Project Grants',
-        link: 'http://deais.nci.nih.gov/foastatus/RFA-PA.jsp?mech=R01,R21',
-        description:
-          'Find current and recent NCI and Trans-NIH Research Project Grants (R01 and R21) that provide funding for specific areas of cancer research.',
-      },
-    ],
-  },
+      id: '23423',
+      name: 'R01 - Category Name',
+      weight: 11,
+      results: [
+        {
+          title: 'Grant Mechanisms and Descriptions',
+          link: 'http://deainfo.nci.nih.gov/flash/awards.htm',
+          description:
+            'List of grant mechanisms, with descriptions and links to associated program announcements.',
+        },
+        {
+          title: 'Research Project Grants',
+          link: 'http://deais.nci.nih.gov/foastatus/RFA-PA.jsp?mech=R01,R21',
+          description:
+            'Find current and recent NCI and Trans-NIH Research Project Grants (R01 and R21) that provide funding for specific areas of cancer research.',
+        },
+      ],
+    },
+  ],
   dictionary: {
     meta: {
       offset: 0,

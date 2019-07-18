@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 // import { callAllTheAPIS } from './state/stuff/actions';
 import querystring from 'querystring';
 
+import { updateResults } from '../../state/store/results';
+import mocks from '../../state/mocks';
+
 const getSearchParams = () => {
   return window.location.search;
 }
@@ -13,8 +16,6 @@ const callAllTheAPIs = (queryString) => {
   const parsedQueryString = querystring.parse(queryString);    
   // Validate query string through helper
   const validatedQueryString = validateQueryString(parsedQueryString);
-
-
   return { type: 'placeholder' }
 }
 
@@ -34,10 +35,16 @@ const Results = () => {
     dispatch(callAllTheAPIs(queryString));
   }, [dispatch, queryString])
 
+  // TEMP FOR DEV
+  useEffect(() =>  {
+    dispatch(updateResults('search', mocks["tumor"].search));
+    dispatch(updateResults('bestBets', mocks["tumor"].bestBets));
+    dispatch(updateResults('dictionary', mocks["tumor"].dictionary));
+  }, [dispatch])
   // Read store state
   //    Select editor state:
   //      Select current results
-  const currentResults = useSelector(store => store.results.search);
+  const currentSearch = useSelector(store => store.results.search);
   //      Select current bestbets
   const currentBestBets = useSelector(store => store.results.bestBets);
   //      Select current dictionary
@@ -56,10 +63,10 @@ const Results = () => {
   //          else If store has current dictionary - display dictionary
   //    else SPINNER!!
   return(
-    currentResults
+    currentSearch
       ? (
           <div>
-            Results
+            <p>Results for: xxx</p>
             {
               // This won't work. We'll need to track whether we are still fetching bestBets.
               // Cases where the page is 1 but best bets hasn't returned yet will render the dictionary
@@ -89,6 +96,12 @@ const Results = () => {
                       </div>
                     )
             }
+            <div>Results x-y of z for: xxx</div>
+            <div>RESULTS LIST</div>
+            <div>Results x-y of z</div>
+            <div>Pager</div>
+            <div>Z Results found for: xxx</div>
+            <div>Search Box</div>
           </div>
         )
       : <div>Spinner</div>
