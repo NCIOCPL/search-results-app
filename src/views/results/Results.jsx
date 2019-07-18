@@ -11,6 +11,7 @@ import {
 import {
   parseSearchParams,
 } from '../../utilities';
+import './Results.css';
 
 // TEMP: Used for mocking state while doing UI dev
 import { updateResults } from '../../state/store/results';
@@ -75,7 +76,7 @@ const Results = () => {
     currentSearch
       ? (
           <div>
-            <h3>Results for: { searchTerm }</h3>
+            <p className="results__info-label">Results for: { searchTerm }</p>
             {
               // This won't work perfectly. We'll need to track whether we are still fetching bestBets.
               // Cases where the page is 1 but best bets hasn't returned yet will render the dictionary
@@ -98,11 +99,11 @@ const Results = () => {
                   currentDictionary  && 
                     <Dictionary />
             }
-            <h4>Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { searchTerm }</h4>
+            <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { searchTerm }</p>
             <ResultsList />
-            <h2>Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults }</h2>
+            <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults }</p>
             <Pager />
-            <h4>{ currentSearch.totalResults } Results found for: { searchTerm }</h4>
+            <p className="results__info-label">{ currentSearch.totalResults } Results found for: { searchTerm }</p>
             <SearchBox />
           </div>
         )
