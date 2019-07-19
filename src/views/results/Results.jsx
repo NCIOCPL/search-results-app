@@ -71,7 +71,7 @@ const Results = () => {
             <p className="results__info-label">Results for: { searchTerm }</p>
             <FeatureBox bestBetsIsVisible={ page === 1 } />
             <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { searchTerm }</p>
-            <ResultsList />
+            <ResultsList { ...currentSearch } />
             <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults }</p>
             <Pager />
             <p className="results__info-label">{ currentSearch.totalResults } Results found for: { searchTerm }</p>
