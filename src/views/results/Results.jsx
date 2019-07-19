@@ -5,8 +5,7 @@ import {
   Pager,
   ResultsList,
   SearchBox,
-  Dictionary,
-  BestBet,
+  FeatureBox,
 } from '../../components';
 import { initiateSearchAction } from '../../state/store/actions';
 import {
@@ -42,8 +41,6 @@ const Results = () => {
 
   // TODO: Parse, format, process, normalize selected state using utility helpers as much as possible
   const currentSearch = useSelector(store => store.results.search);
-  const currentBestBets = useSelector(store => store.results.bestBets);
-  const currentDictionary = useSelector(store => store.results.dictionary);
 
   // ######### TEMP FOR DEV ###########
   useEffect(() =>  {
@@ -72,28 +69,7 @@ const Results = () => {
       ? (
           <div>
             <p className="results__info-label">Results for: { searchTerm }</p>
-            {
-              // This won't work perfectly. We'll need to track whether we are still fetching bestBets.
-              // Cases where the page is 1 but best bets hasn't returned yet will render the dictionary
-              // and potentially pop in the best bets later.
-              (page === 1 && currentBestBets) 
-                ? 
-                  currentBestBets.map((bestBet, bestBetIndex) => {
-                    return (
-                      <div key={ bestBetIndex }>
-                        <BestBet>
-                          {
-                            (bestBetIndex === 0 && currentDictionary) && 
-                              <Dictionary />
-                          }
-                        </BestBet>
-                      </div>
-                    )
-                  })
-                :
-                  currentDictionary  && 
-                    <Dictionary />
-            }
+            <FeatureBox bestBetsIsVisible={ page === 1 } />
             <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { searchTerm }</p>
             <ResultsList />
             <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults }</p>
