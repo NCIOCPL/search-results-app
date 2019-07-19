@@ -108,18 +108,20 @@ const tumor = {
     },
   ],
   dictionary: {
-    meta: {
-      offset: 0,
-      result_count: 1,
-      audience: 'Patient',
-      language: 'English',
-      message: ['Found 1 results.'],
-    },
-    result: [
-      {
-        id: 46634,
-        matched: 'tumor',
-        term: {
+    // This is the original shape of the response. We should remove the extraneous details and only retain the
+    // term details.
+    // meta: {
+    //   offset: 0,
+    //   result_count: 1,
+    //   audience: 'Patient',
+    //   language: 'English',
+    //   message: ['Found 1 results.'],
+    // },
+    // result: [
+      // {
+        // id: 46634,
+        // matched: 'tumor',
+        // term: {
           id: '46634',
           term: 'tumor',
           alias: [],
@@ -141,9 +143,9 @@ const tumor = {
             summary: [],
             term: [],
           },
-        },
-      },
-    ],
+        // },
+      // },
+  //   ],
   },
 };
 
