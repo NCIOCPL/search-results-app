@@ -20,6 +20,7 @@ export const initiateSiteWideSearchQuery = searchParams => {
     const queryString = searchParams // Generate query string
     return {
         type: '@@cache/RETRIEVE',
+        searchParams,
         service: 'search',
         cacheKey: queryString,
         fetch: {},
@@ -28,6 +29,7 @@ export const initiateSiteWideSearchQuery = searchParams => {
 
 export const initiateBestBetsQuery = searchParams => ({
     type: '@@cache/RETRIEVE',
+    searchParams,
     service: 'bestBets',
     cacheKey: searchParams.swKeyword, // Or term or something
     fetch: {},
@@ -35,6 +37,7 @@ export const initiateBestBetsQuery = searchParams => ({
 
 export const initiateDictionaryQuery = searchParams => ({
     type: '@@cache/RETRIEVE',
+    searchParams,
     service: 'dictionary',
     cacheKey: searchParams.swKeyword, // Or term or some such
     fetch: {},

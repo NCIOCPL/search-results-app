@@ -6,6 +6,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as reducers from './state/store/reducers';
 import createEventReporterMiddleware from './state/middleware/event-reporter';
+import createApiMiddleware from './state/middleware/api';
 import metadataMiddleWare from './state/middleware/metadata';
 import cacheMiddleware from './state/middleware/cache';
 import { createBrowserHistory } from 'history';
@@ -19,6 +20,10 @@ const initialize = ({
   // useSessionStorage = true,
   rootId = 'NCI-search-results-root',
   eventHandler,
+  services,
+  // By passing in the API services as both configuration objects and a url generator (controller) we
+  // can move most of the custom processing into the bridge code for easier adjustment per site based on
+  // changing requirements.
   // services = {
   //   search: {
   //     ?endpoint [/Search],
@@ -26,7 +31,8 @@ const initialize = ({
   //       collection [cgov|doc],
   //       site [all|microsite URL],
   //       language: [en|es]
-  //     }
+  //     },
+  //     queryBuilder: () => {},
   //   },
   //   dictionary: {
   //     ?endpoint [/Dictionary.Service/v1/search],
@@ -34,14 +40,16 @@ const initialize = ({
   //       dictionary: [term] equivalent to collection,
   //       language: [English|Spanish]
   //       searchType: "exact",
-  //     }
+  //     },
+  //     queryBuilder: () => {},
   //   },
   //   bestBets: {
   //     ?endpoint [],
   //     params: {
   //       language: [en|es],
   //       collection [live|preview],
-  //     }
+  //     },
+  //     queryBuilder: () => {},
   //   }
   // }
   // language,
@@ -51,6 +59,8 @@ const initialize = ({
 
   // Set up middlewares.
   const eventReporterMiddleware = createEventReporterMiddleware(eventHandler);
+
+  const apiMiddleware = createApiMiddleware(services);
 
   const history = createBrowserHistory();
   const historyMiddleware = createHistoryMiddleware(history);
@@ -62,6 +72,7 @@ const initialize = ({
       applyMiddleware(
         metadataMiddleWare,
         cacheMiddleware,
+        apiMiddleware,
         historyMiddleware,
         eventReporterMiddleware,
       )
@@ -82,7 +93,28 @@ const initialize = ({
 };
 
 if (process.env.NODE_ENV !== 'production') {
-  initialize();
+  const rootId = 'NCI-search-results-root';
+  const eventHandler = () => {};
+  const search = searchParams => {
+    // Process querystring. Return api endpoint + query
+  }
+  const dictionary = searchParams => {
+    // Process querystring. Return api endpoint + query
+    
+  }
+  const bestBets = searchParams => {
+    // Process querystring. Return api endpoint + query
+
+  }
+  initialize({
+    rootId,
+    eventHandler,
+    services: {
+      search,
+      dictionary,
+      bestBets,
+    },
+  });
 }
 
 export default initialize;
