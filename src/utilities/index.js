@@ -8,19 +8,9 @@ import querystring from 'query-string';
  * @return {Object} formatted search params
  */
 export const parseSearchParams = searchParamsString => {
-  const unformattedSearchParams = querystring.parse(searchParamsString);
-  const { 
-    page: pageString,
-    pageunit: pageunitString,
-    Offset: OffsetString,
-  } = unformattedSearchParams;
-  const page = parseInt(pageString);
-  const pageunit = parseInt(pageunitString);
-  const Offset = parseInt(OffsetString);
-  return {
-    ...unformattedSearchParams,
-    page,
-    pageunit,
-    Offset,
-  }
+  const formattedSearchParams = querystring.parse(searchParamsString, {
+    parseNumbers: true,
+    parseBooleans: true,
+  })
+  return formattedSearchParams;
 };
