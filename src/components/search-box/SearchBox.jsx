@@ -16,17 +16,18 @@ const SearchBox = () => {
     const term = searchType === 'search' ? newTerm : `${ newTerm } ${ oldTerm }`;
     const params = {
       page: 1,
-      pageunit: currentUrlOptions ? currentUrlOptions.pageunit : 10, // use current or default to 10,
+      pageunit: currentUrlOptions ? currentUrlOptions.pageunit : 10,
       Offset: 0,
       term,
     }
     dispatch(newSearch(params));
-  }, [dispatch, textInput, currentUrlOptions]);
+  }, [dispatch, textInput, currentUrlOptions, radio]);
   
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
       executeNewSearch();
+      updateTextInput('');
     } }>
 			<span className="radio">
         <input 
