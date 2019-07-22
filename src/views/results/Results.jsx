@@ -8,13 +8,11 @@ import {
   FeatureBox,
 } from '../../components';
 import { initiateSearchAction } from '../../state/store/actions';
-import {
-  parseSearchParams,
-} from '../../utilities';
+import { parseSearchParams } from '../../utilities';
+import { useCurrentSearchResults } from '../../utilities/hooks';
 import './Results.css';
 
 // TEMP: Used for mocking state while doing UI dev
-import { updateResults } from '../../state/store/results';
 import mocks from '../../state/mocks';
 
 // TODO: Move to utility functions
@@ -29,57 +27,34 @@ const Results = () => {
   // we want to listen primarily for changes to the URL so we can start the process of deriving
   // and collecting that state.
 
-  // Grab query string:
+  // 1. Grab current search param string:
   // We do this outside of the hook so that the hook is reactive only to changes in the querystring (we don't want
   // to make API calls unnecessarily when the searchparams haven't changed on rerenders)
   const searchParamsString = getSearchParams();
   const searchParams = parseSearchParams(searchParamsString);
 
-  // We want to use the string as the value to memoize based on.
+  // Final. Kick off API calls based on new search params.
+  // Note: We want to use the string as the value to memoize based on.
   // Using the deconstructed object means unnecessary calls because the object
   // is new on each render.
+  // N.B. The useEffect hook will in fact run after everything else in this function (it is always guaranteed
+  // to run after the DOM has been rewritten). We declare it here because we want certain variables to accessible
+  // in its closure.
   useEffect(() => {
     const {
       swKeyword,
       ...params
     } = searchParams;
-    // Fire off API calls
     initiateSearchAction(dispatch)({
       term: swKeyword,
       params
     });
   }, [dispatch, searchParamsString])
 
-  // We need to reconstitute from the cache. 
-  const cache = useSelector(store => store.cache);
-  
-  // RESTORE CURRENT SEARCH RESULTS FROM CACHE
-  // TODO: Parse, format, process, normalize selected state using utility helpers as much as possible
-  // TODO: All reconstitutions should be abstracted into helpers that take a snapshot of the cache
-  // and return the appropriate reconsituted resource.
-  const currentSearchCacheKey = useSelector(store => store.results.search);
-  const retrievedCachedSearch = (cache, cacheKey) => {
-    if(!cacheKey){
-      return null;
-    }
-    const normalizedSearch = cache.search[cacheKey];
-    const restoredSearch = {
-      ...normalizedSearch,
-      results: normalizedSearch.results.map(resultItemCacheKey => cache.resultItems[resultItemCacheKey]),
-    }
-    return restoredSearch;
-  }
-  const currentSearch = retrievedCachedSearch(cache, currentSearchCacheKey);
+  // 2. Get current results from cache.
+  const currentSearch = useCurrentSearchResults();
 
-  // ######### TEMP FOR DEV ###########
-  // useEffect(() =>  {
-    // TODO: Update mocks to match normalized search. This mock is no longer a valid shape.
-    // dispatch(updateResults('search', mocks["tumor"].search));
-    // dispatch(updateResults('bestBets', mocks["tumor"].bestBets));
-    // dispatch(updateResults('dictionary', mocks["tumor"].dictionary));
-  // }, [dispatch])
-  // ##################################
-
+  // 3a. Set up parameters for rendering pagers/counters.
   const {
     swKeyword: searchTerm,
     page,
@@ -87,7 +62,7 @@ const Results = () => {
     Offset: offset,
   } = searchParams;
 
-  // Calculate the numbers used for the results info displays.
+  // 3b. Calculate the numbers used for the results info displays.
   const resultsStart = 1 + offset;
   // If we are on the last page of results, the range might be less than the offset
   // This breaks if we don't have a current search (total) yet so we delay the calculation by wrapping it in a function call or component...

@@ -1,5 +1,7 @@
 import querystring from 'query-string';
 
+// When the utility function count grows, break these out into more specific modules by function.
+
 // Returning undefined ensures Redux will load from initialState if sessionStorage isn't available
 export const loadStateFromSessionStorage = appId => {
   try {
