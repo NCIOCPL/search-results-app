@@ -74,7 +74,6 @@ const Results = () => {
               page={ page }
               pageSize={ pageunit }
               start={ resultsStart }
-              end={ getResultsEnd(offset + pageunit, currentSearch.totalResults) }
               totalResults={ currentSearch.totalResults }
             />
             <p className="results__info-label">{ currentSearch.totalResults } Results found for: { term }</p>

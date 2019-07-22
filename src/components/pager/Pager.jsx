@@ -42,7 +42,6 @@ const Pager = ({
   page,
   pageSize,
   start,
-  end,
   totalResults,
 }) => {
   const isSinglePageOnly = totalResults <= pageSize;
