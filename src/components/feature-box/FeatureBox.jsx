@@ -1,15 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import BestBet from './best-bet';
 import Dictionary from './dictionary';
+import { useBestBets } from '../../utilities/hooks';
 
 const FeatureBox = ({ bestBetsIsVisible }) => {
-  const bestBetsCache = useSelector(store => store.cache.bestBets);
-  const bestBetsCacheKey = useSelector(store => store.results.bestBets);
-  let bestBets = null;
-  if(bestBetsCache && bestBetsCacheKey){
-    bestBets = bestBetsCache[bestBetsCacheKey];
-  };
+  const bestBets = useBestBets();
 
   if(bestBetsIsVisible && bestBets){
     return bestBets.map((bestBet, bbIndex) => (

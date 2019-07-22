@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 
 /**
- * If the results store has a current search key, recontitute
- * the original shape of the processed results from the cache.
+ * Whenever a UI component needs access to the current search
+ * results they can use this hook.
  */
 export const useCurrentSearchResults = () => {
   const cache = useSelector(store => store.cache);
@@ -18,10 +18,14 @@ export const useCurrentSearchResults = () => {
   return restoredSearch;
 }
 
+/**
+ * Whenever a UI component needs access to the current dictionary
+ * results they can use this hook.
+ */
 export const useDictionary = () => {
   const dictionaryCache = useSelector(store => store.cache.dictionary);
   const dictionaryCacheKey = useSelector(store => store.results.dictionary);
-  if (!dictionaryCacheKey) {
+  if(!dictionaryCache || !dictionaryCacheKey){
     return null;
   }
   const dictionary = dictionaryCache[dictionaryCacheKey];
@@ -29,4 +33,21 @@ export const useDictionary = () => {
     return null;
   }
   return dictionary;
+}
+
+/**
+ * Whenever a UI component needs access to the current bestBets
+ * results they can use this hook.
+ */
+export const useBestBets = () => {
+  const bestBetsCache = useSelector(store => store.cache.bestBets);
+  const bestBetsCacheKey = useSelector(store => store.results.bestBets);
+  if(!bestBetsCache || !bestBetsCacheKey){
+    return null;
+  }
+  const bestBets = bestBetsCache[bestBetsCacheKey];
+  if(!bestBets){
+    return null;
+  }
+  return bestBets;
 }
