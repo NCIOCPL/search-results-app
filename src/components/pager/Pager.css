@@ -1,4 +1,4 @@
-.pager {
+.pager__container {
   display: flex;
   justify-content: space-between;
   margin-top: 0.6em;
@@ -28,11 +28,11 @@
   transition: all 150ms linear;
 }
 
-.pager .pager__num:focus, .pager .pager__arrow:focus {
+.pager__container .pager__num:focus, .pager__container .pager__arrow:focus {
   background: #cbe8fc;
 }
 
-.pager .pager__num, .pager .pager__arrow {
+.pager__container .pager__num, .pager__container .pager__arrow {
   margin: 0 3px;
 }
 
@@ -46,7 +46,7 @@
 }
 
 
-.pager .pager__num--active {
+.pager__container .pager__num--active {
   background: #2a71a5;
   color: white;
   cursor: default;

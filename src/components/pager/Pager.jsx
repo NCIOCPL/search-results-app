@@ -60,30 +60,32 @@ const Pager = ({
   // const currentPage = Math.ceil(start / pageSize); // This is probably not neccesary.
   const pages = formatPagerArray(totalPages, page);
   return (
-    <div className='pager__container'>
-      {
-        !isFirstPage &&
-          <div className="pager__arrow">{ '<' }</div>
-      }
-      {
-        pages.map((pg, idx) => {
-          const isCurrent = pg === page; // To be used for disabling click action
-          // A 0 represents an ellipses
-          if(pg > 0){
+    <nav className="pager__container">
+      <div className='pager__nav'>
+        {
+          !isFirstPage &&
+            <div className="pager__arrow">{ '<' }</div>
+        }
+        {
+          pages.map((pg, idx) => {
+            const isCurrent = pg === page; // To be used for disabling click action
+            // A 0 represents an ellipses
+            if(pg > 0){
+              return (
+                <div key={ idx } className={ `pager__num ${ isCurrent ? 'pager__num--active' : ''}`}>{ pg }</div>
+              )
+            }
             return (
-              <div key={ idx } className={ `pager__num ${ isCurrent ? 'pager__num--active' : ''}`}>{ pg }</div>
+              <div key={ idx } className='pager__num pager__ellipses'>{ '...' }</div>
             )
-          }
-          return (
-            <div key={ idx } className='pager__num pager__ellipses'>{ '...' }</div>
-          )
-        })
-      }
-      {
-        !isLastPage &&
-          <div className="pager__arrow">{ '>' }</div>
-      }
-    </div>
+          })
+        }
+        {
+          !isLastPage &&
+            <div className="pager__arrow">{ '>' }</div>
+        }
+      </div>
+    </nav>
   );
 };
 
