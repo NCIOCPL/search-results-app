@@ -73,7 +73,13 @@ const Results = () => {
             <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { searchTerm }</p>
             <ResultsList { ...currentSearch } />
             <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults }</p>
-            <Pager />
+            <Pager 
+              page={ page }
+              pageSize={ pageunit }
+              start={ resultsStart }
+              end={ getResultsEnd(offset + pageunit, currentSearch.totalResults) }
+              totalResults={ currentSearch.totalResults }
+            />
             <p className="results__info-label">{ currentSearch.totalResults } Results found for: { searchTerm }</p>
             <SearchBox />
           </div>
