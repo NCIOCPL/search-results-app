@@ -72,12 +72,12 @@ const Results = () => {
   const currentSearch = retrievedCachedSearch(cache, currentSearchCacheKey);
 
   // ######### TEMP FOR DEV ###########
-  useEffect(() =>  {
+  // useEffect(() =>  {
     // TODO: Update mocks to match normalized search. This mock is no longer a valid shape.
     // dispatch(updateResults('search', mocks["tumor"].search));
     // dispatch(updateResults('bestBets', mocks["tumor"].bestBets));
     // dispatch(updateResults('dictionary', mocks["tumor"].dictionary));
-  }, [dispatch])
+  // }, [dispatch])
   // ##################################
 
   const {
