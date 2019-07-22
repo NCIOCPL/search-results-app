@@ -1,17 +1,5 @@
 import axios from 'axios';
-
-
-const cacheAPIResponse = (serviceName, cacheKey, body) => {
-  return {
-    type: 'poop',
-  }
-}
-
-const loadAPIResponse = (serviceName, body) => {
-  return {
-    type: 'poop 2: poop harder',
-  }
-}
+import { newAPIResponse } from '../../store/actions';
 
 /**
  * This middleware serves two purposes (and could perhaps be broken into two pieces).
@@ -31,6 +19,7 @@ const createApiMiddleware = services => ({ dispatch, getState }) => next => asyn
     service: serviceName,
     searchConfig,
     cacheKey,
+    fetchHandlers,
   } = action;
   const service = services[serviceName];
   if(service != null){
@@ -38,11 +27,9 @@ const createApiMiddleware = services => ({ dispatch, getState }) => next => asyn
     try {
       const response = await axios.get(endpoint);
       const body = response.data;
-      dispatch(cacheAPIResponse(serviceName, cacheKey, body));
-      // We need to cache the response so that references to it in normalized
-      // data are not missing.
-      dispatch(loadAPIResponse(serviceName, body));
-      console.log(serviceName, cacheKey, body)
+      const { formatResponse } = fetchHandlers;
+      const formattedBody = formatResponse ? formatResponse(body) : body;
+      dispatch(newAPIResponse(serviceName, cacheKey, formattedBody));
     }
     catch(err){
       console.log(err);

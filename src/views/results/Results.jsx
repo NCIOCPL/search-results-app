@@ -33,29 +33,53 @@ const Results = () => {
   // We do this outside of the hook so that the hook is reactive only to changes in the querystring (we don't want
   // to make API calls unnecessarily when the searchparams haven't changed on rerenders)
   const searchParamsString = getSearchParams();
+  const searchParams = parseSearchParams(searchParamsString);
 
+  // We want to use the string as the value to memoize based on.
+  // Using the deconstructed object means unnecessary calls because the object
+  // is new on each render.
   useEffect(() => {
+    const {
+      swKeyword,
+      ...params
+    } = searchParams;
     // Fire off API calls
     initiateSearchAction(dispatch)({
-      term: 'tumor',
-      params: {
-        page: 1,
-      }
+      term: swKeyword,
+      params
     });
   }, [dispatch, searchParamsString])
 
+  // We need to reconstitute from the cache. 
+  const cache = useSelector(store => store.cache);
+  
+  // RESTORE CURRENT SEARCH RESULTS FROM CACHE
   // TODO: Parse, format, process, normalize selected state using utility helpers as much as possible
-  const currentSearch = useSelector(store => store.results.search);
+  // TODO: All reconstitutions should be abstracted into helpers that take a snapshot of the cache
+  // and return the appropriate reconsituted resource.
+  const currentSearchCacheKey = useSelector(store => store.results.search);
+  const retrievedCachedSearch = (cache, cacheKey) => {
+    if(!cacheKey){
+      return null;
+    }
+    const normalizedSearch = cache.search[cacheKey];
+    const restoredSearch = {
+      ...normalizedSearch,
+      results: normalizedSearch.results.map(resultItemCacheKey => cache.resultItems[resultItemCacheKey]),
+    }
+    return restoredSearch;
+  }
+  const currentSearch = retrievedCachedSearch(cache, currentSearchCacheKey);
 
   // ######### TEMP FOR DEV ###########
   useEffect(() =>  {
-    dispatch(updateResults('search', mocks["tumor"].search));
-    dispatch(updateResults('bestBets', mocks["tumor"].bestBets));
-    dispatch(updateResults('dictionary', mocks["tumor"].dictionary));
+    // TODO: Update mocks to match normalized search. This mock is no longer a valid shape.
+    // dispatch(updateResults('search', mocks["tumor"].search));
+    // dispatch(updateResults('bestBets', mocks["tumor"].bestBets));
+    // dispatch(updateResults('dictionary', mocks["tumor"].dictionary));
   }, [dispatch])
   // ##################################
 
-  const searchParams = parseSearchParams(searchParamsString);
   const {
     swKeyword: searchTerm,
     page,

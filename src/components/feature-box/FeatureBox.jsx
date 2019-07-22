@@ -4,7 +4,12 @@ import BestBet from './best-bet';
 import Dictionary from './dictionary';
 
 const FeatureBox = ({ bestBetsIsVisible }) => {
-  const bestBets = useSelector(store => store.results.bestBets);
+  const bestBetsCache = useSelector(store => store.cache.bestBets);
+  const bestBetsCacheKey = useSelector(store => store.results.bestBets);
+  let bestBets = null;
+  if(bestBetsCache && bestBetsCacheKey){
+    bestBets = bestBetsCache[bestBetsCacheKey];
+  };
 
   if(bestBetsIsVisible && bestBets){
     return bestBets.map((bestBet, bbIndex) => (

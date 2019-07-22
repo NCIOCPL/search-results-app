@@ -2,8 +2,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const Dictionary = () => {
-  const dictionary = useSelector(store => store.results.dictionary);
-  if (!dictionary) {
+  const dictionaryCache = useSelector(store => store.cache.dictionary);
+  const dictionaryCacheKey = useSelector(store => store.results.dictionary);
+  if (!dictionaryCacheKey) {
+    return null;
+  }
+  const dictionary = dictionaryCache[dictionaryCacheKey];
+  if(!dictionary){
     return null;
   }
   const {
