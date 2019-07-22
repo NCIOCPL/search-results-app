@@ -20,38 +20,10 @@ const initialize = ({
   // useSessionStorage = true,
   rootId = 'NCI-search-results-root',
   eventHandler,
-  services,
   // By passing in the API services as both configuration objects and a url generator (controller) we
   // can move most of the custom processing into the bridge code for easier adjustment per site based on
   // changing requirements.
-  // services = {
-  //   search: {
-  //     ?endpoint [/Search],
-  //     params: {
-  //       collection [cgov|doc],
-  //       site [all|microsite URL],
-  //       language: [en|es]
-  //     },
-  //     queryBuilder: () => {},
-  //   },
-  //   dictionary: {
-  //     ?endpoint [/Dictionary.Service/v1/search],
-  //     params: {
-  //       dictionary: [term] equivalent to collection,
-  //       language: [English|Spanish]
-  //       searchType: "exact",
-  //     },
-  //     queryBuilder: () => {},
-  //   },
-  //   bestBets: {
-  //     ?endpoint [],
-  //     params: {
-  //       language: [en|es],
-  //       collection [live|preview],
-  //     },
-  //     queryBuilder: () => {},
-  //   }
-  // }
+  services = {},
   // language,
 } = {}) => {
   // TODO: Sessionstorage loading.
@@ -95,16 +67,22 @@ const initialize = ({
 if (process.env.NODE_ENV !== 'production') {
   const rootId = 'NCI-search-results-root';
   const eventHandler = () => {};
-  const search = searchParams => {
-    // Process querystring. Return api endpoint + query
+  const search = searchConfig => {
+    const baseEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/Search/cgov/en/';
+    const endpoint = baseEndpoint + searchConfig.queryString;
+    return endpoint;
   }
-  const dictionary = searchParams => {
-    // Process querystring. Return api endpoint + query
-    
+  const dictionary = searchConfig => {
+    const baseEndpoint = 'https://www.cancer.gov/Dictionary.Service/v1/search?dictionary=term&language=English&searchType=exact&offset=0&maxResuts=0';
+    const searchText = encodeURI(searchConfig.term);
+    const endpoint = `${ baseEndpoint }&searchText=${ searchText }`;
+    return endpoint;
   }
-  const bestBets = searchParams => {
-    // Process querystring. Return api endpoint + query
-
+  const bestBets = searchConfig => {
+    const baseEndpoint = 'https://webapis.cancer.gov/bestbets/v1/BestBets/live/en/';
+    const searchText = encodeURI(searchConfig.term);
+    const endpoint = baseEndpoint + searchText;
+    return endpoint;
   }
   initialize({
     rootId,

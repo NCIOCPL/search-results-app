@@ -1,4 +1,18 @@
 import axios from 'axios';
+
+
+const cacheAPIResponse = (serviceName, cacheKey, body) => {
+  return {
+    type: 'poop',
+  }
+}
+
+const loadAPIResponse = (serviceName, body) => {
+  return {
+    type: 'poop 2: poop harder',
+  }
+}
+
 /**
  * This middleware serves two purposes (and could perhaps be broken into two pieces).
  * 1. To set up API requests with all the appropriate settings
@@ -15,18 +29,20 @@ const createApiMiddleware = services => ({ dispatch, getState }) => next => asyn
 
   const { 
     service: serviceName,
-    searchParams,
+    searchConfig,
+    cacheKey,
   } = action;
   const service = services[serviceName];
   if(service != null){
-    const endpoint = service(searchParams);
+    const endpoint = service(searchConfig);
     try {
       const response = await axios.get(endpoint);
       const body = response.data;
-      // Normalize response
-      // Cache response with serviceName key in cache
-      // Load response with serviceName key in current results
-      console.log(body)
+      dispatch(cacheAPIResponse(serviceName, cacheKey, body));
+      // We need to cache the response so that references to it in normalized
+      // data are not missing.
+      dispatch(loadAPIResponse(serviceName, body));
+      console.log(serviceName, cacheKey, body)
     }
     catch(err){
       console.log(err);

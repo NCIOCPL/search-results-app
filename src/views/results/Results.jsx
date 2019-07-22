@@ -36,7 +36,12 @@ const Results = () => {
 
   useEffect(() => {
     // Fire off API calls
-    initiateSearchAction(dispatch)(searchParamsString);
+    initiateSearchAction(dispatch)({
+      term: 'tumor',
+      params: {
+        page: 1,
+      }
+    });
   }, [dispatch, searchParamsString])
 
   // TODO: Parse, format, process, normalize selected state using utility helpers as much as possible
