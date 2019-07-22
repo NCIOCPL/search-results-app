@@ -13,11 +13,12 @@ import { createBrowserHistory } from 'history';
 import createHistoryMiddleware from './state/middleware/history';
 import NavigationHandler from './components/navigation-handler';
 import Results from './views/results';
+import { loadStateFromSessionStorage, saveStatetoSessionStorage } from './utilities';
 import './index.css';
 
 const initialize = ({
-  // appId = '@@/DEFAULT_APP_ID',
-  // useSessionStorage = true,
+  appId = '@@/DEFAULT_SWS_APP_ID',
+  useSessionStorage = true,
   rootId = 'NCI-search-results-root',
   eventHandler,
   // By passing in the API services as both configuration objects and a url generator (controller) we
@@ -27,7 +28,10 @@ const initialize = ({
   // language,
 } = {}) => {
   // TODO: Sessionstorage loading.
-  const cachedState = undefined;
+  let cachedState;
+  if(process.env.NODE_ENV !== 'development' && useSessionStorage === true) {
+      cachedState = loadStateFromSessionStorage(appId);
+  }
 
   // Set up middlewares.
   const eventReporterMiddleware = createEventReporterMiddleware(eventHandler);
@@ -50,6 +54,25 @@ const initialize = ({
       )
     )
   );
+
+  // With the store now created, we want to subscribe to updates.
+  // This implementation updates session storage backup on each store change.
+  // If for some reason that proves too heavy, it's simple enough to scope to
+  // only specific changes (like the url);
+  if(process.env.NODE_ENV !== 'development' && useSessionStorage === true) {
+    const saveDesiredStateToSessionStorage = () => {
+        const allState = store.getState();
+        // No need to store error to session storage
+        const { error, ...state } = allState;
+        saveStatetoSessionStorage({
+            state,
+            appId,
+        });
+    };
+
+    store.subscribe(saveDesiredStateToSessionStorage);
+}
+
 
   const App = () => {
     return (
