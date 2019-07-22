@@ -1,13 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDictionary } from '../../../utilities/hooks';
 
 const Dictionary = () => {
-  const dictionaryCache = useSelector(store => store.cache.dictionary);
-  const dictionaryCacheKey = useSelector(store => store.results.dictionary);
-  if (!dictionaryCacheKey) {
-    return null;
-  }
-  const dictionary = dictionaryCache[dictionaryCacheKey];
+  const dictionary = useDictionary();
   if(!dictionary){
     return null;
   }
