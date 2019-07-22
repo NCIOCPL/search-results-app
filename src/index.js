@@ -1,4 +1,5 @@
 import 'react-app-polyfill/ie11';
+import './polyfills/array_fill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -27,19 +28,16 @@ const initialize = ({
   services = {},
   // language,
 } = {}) => {
-  // TODO: Sessionstorage loading.
   let cachedState;
   if(process.env.NODE_ENV !== 'development' && useSessionStorage === true) {
       cachedState = loadStateFromSessionStorage(appId);
   }
 
   // Set up middlewares.
-  const eventReporterMiddleware = createEventReporterMiddleware(eventHandler);
-
-  const apiMiddleware = createApiMiddleware(services);
-
   const history = createBrowserHistory();
   const historyMiddleware = createHistoryMiddleware(history);
+  const eventReporterMiddleware = createEventReporterMiddleware(eventHandler);
+  const apiMiddleware = createApiMiddleware(services);
 
   const store = createStore(
     combineReducers(reducers),
