@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { newSearch } from '../../state/store/actions';
+import { useUrlOptionsMap } from '../../utilities/hooks';
 
 const SearchBox = () => {
+  const dispatch = useDispatch();
   const [radio, setRadio] = useState(1);
   const [textInput, updateTextInput] = useState('');
+  const currentUrlOptions = useUrlOptionsMap();
 
-  const onSubmit = () => { };
-
+  const executeNewSearch = useCallback(() => {
+    const newTerm = textInput;
+    const oldTerm = currentUrlOptions ? currentUrlOptions.term : '';
+    const searchType = radio === 1 ? 'search' : 'search_within';
+    const term = searchType === 'search' ? newTerm : `${ newTerm } ${ oldTerm }`;
+    const params = {
+      page: 1,
+      pageunit: currentUrlOptions ? currentUrlOptions.pageunit : 10, // use current or default to 10,
+      Offset: 0,
+      term,
+    }
+    dispatch(newSearch(params));
+  }, [dispatch, textInput, currentUrlOptions]);
+  
   return (
-    <form onSubmit={ onSubmit }>
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      executeNewSearch();
+    } }>
 			<span className="radio">
         <input 
           id="ctl34_rblSWRSearchType_0" 

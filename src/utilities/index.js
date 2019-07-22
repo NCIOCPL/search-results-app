@@ -32,6 +32,13 @@ export const saveStatetoSessionStorage = ({
   }
 }
 
+export const removeLeadingSlash = url => {
+  // Remove leading slash if any.
+  const test = /(\/?)(.+)/;
+  const sanitized = url.match(test)[2];
+  return sanitized;
+}
+
 /**
  * Process, validate, and typecast variables correctly from
  * the raw object created by the querystring library.
@@ -39,10 +46,24 @@ export const saveStatetoSessionStorage = ({
  * @param {Object} unformattedSearchParams
  * @return {Object} formatted search params
  */
-export const parseSearchParams = searchParamsString => {
-  const formattedSearchParams = querystring.parse(searchParamsString, {
+export const parseURL = url => {
+  if(!url){
+    return {};
+  }
+  const [term, searchParamsString] = removeLeadingSlash(url).split('?');
+  const decodedTerm = decodeURI(term);
+  const urlOptions = querystring.parse(searchParamsString, {
     parseNumbers: true,
     parseBooleans: true,
   })
-  return formattedSearchParams;
+  urlOptions.term = decodedTerm;
+  return urlOptions;
 };
+
+export const constructURL = urlOptionsMap => {
+  const { term, ...params } = urlOptionsMap;
+  const encodedTerm = encodeURI(term);
+  const encodedParams = querystring.stringify(params);
+  const url = `${encodedTerm}?${encodedParams}`;
+  return url;
+}

@@ -53,6 +53,22 @@ const initialize = ({
     )
   );
 
+  store.dispatch({
+    type: '@@router/update_location',
+    payload: history.location.pathname + history.location.search,
+  })
+  
+  // The history library acts as our API between us and the browser's History API.
+  // We want any changes to the browser location to be used to rerender the page.
+  history.listen(location  => {
+    const url = location.pathname + location.search;
+    console.log(url)
+    store.dispatch({
+      type: '@@router/update_location',
+      payload: url,
+    })
+  })
+
   // With the store now created, we want to subscribe to updates.
   // This implementation updates session storage backup on each store change.
   // If for some reason that proves too heavy, it's simple enough to scope to
@@ -95,20 +111,20 @@ if (process.env.NODE_ENV !== 'production') {
   }
   const rootId = 'NCI-search-results-root';
   const eventHandler = () => {};
-  const search = searchConfig => {
+  const search = urlOptionsMap => {
     const baseEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/Search/cgov/en/';
-    const endpoint = baseEndpoint + searchConfig.queryString;
+    const endpoint = baseEndpoint + urlOptionsMap.queryString;
     return endpoint;
   }
-  const dictionary = searchConfig => {
+  const dictionary = urlOptionsMap => {
     const baseEndpoint = 'https://www.cancer.gov/Dictionary.Service/v1/search?dictionary=term&language=English&searchType=exact&offset=0&maxResuts=0';
-    const searchText = encodeURI(searchConfig.term);
+    const searchText = encodeURI(urlOptionsMap.term);
     const endpoint = `${ baseEndpoint }&searchText=${ searchText }`;
     return endpoint;
   }
-  const bestBets = searchConfig => {
+  const bestBets = urlOptionsMap => {
     const baseEndpoint = 'https://webapis.cancer.gov/bestbets/v1/BestBets/live/en/';
-    const searchText = encodeURI(searchConfig.term);
+    const searchText = encodeURI(urlOptionsMap.term);
     const endpoint = baseEndpoint + searchText;
     return endpoint;
   }

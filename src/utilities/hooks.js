@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-
+import { parseURL } from './index';
 /**
  * Whenever a UI component needs access to the current search
  * results they can use this hook.
@@ -50,4 +51,17 @@ export const useBestBets = () => {
     return null;
   }
   return bestBets;
+}
+
+export const useUrlOptionsMap = () => {
+  const url = useSelector(store => store.results.search);
+  const urlOptionsMap = useMemo(() => {
+    if(!url){
+      return {};
+    }
+    const urlOptionsMap = parseURL(url);
+    // Add back in the original string for potential reference.
+    return urlOptionsMap;
+  }, [url]);
+  return urlOptionsMap;
 }

@@ -4,3 +4,4 @@
 export { reducer as cache } from './cache';
 export { reducer as error } from './error';
 export { reducer as results } from './results';
+export { reducer as router } from './router';

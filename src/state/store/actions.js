@@ -1,4 +1,5 @@
 import querystring from 'query-string';
+import { constructURL } from '../../utilities';
 // Action creator and controllers that are not directly associated with reducers. i.e., actions that target middleware
 // or complex sets of action creators.
 
@@ -15,31 +16,32 @@ export const newAPIResponse = (serviceName, cacheKey, body) => {
   }
 }
 
-export const initiateSearchAction = dispatch => searchConfig => {
-  dispatch(initiateSiteWideSearchQuery(searchConfig));
-  dispatch(initiateDictionaryQuery(searchConfig));
+export const initiateAPICalls = dispatch => urlOptionsMap => {
+  dispatch(initiateSiteWideSearchQuery(urlOptionsMap));
+  dispatch(initiateDictionaryQuery(urlOptionsMap));
   // TODO: Don't call this except when the service has been specified in the initialization. (Only CGOV gets best bets)
   // We only want to call bestBets when it's the first page of results.
-  const isFirstPage = searchConfig.params.page === 1;
+  const isFirstPage = urlOptionsMap.page === 1;
   if (isFirstPage) {
-    dispatch(initiateBestBetsQuery(searchConfig));
+    dispatch(initiateBestBetsQuery(urlOptionsMap));
   }
 };
 
-export const initiateSiteWideSearchQuery = searchConfig => {
+export const initiateSiteWideSearchQuery = urlOptionsMap => {
   // TODO: To be abstracted into encoding function
   // While it would be preferable to encode this in the external service passed in,
   // we need to generate the query string now for the cache lookup. Since we are already generating it
   // once we don't want to repeat ourselves and potentially have two different methods for doing so
   // existing in the same code pipeline.
-  const encodedTerm = encodeURI(searchConfig.term);
-  const encodedParams = querystring.stringify(searchConfig.params);
+  const { term, ...params } = urlOptionsMap;
+  const encodedTerm = encodeURI(term);
+  const encodedParams = querystring.stringify(params);
   const queryString = `${encodedTerm}?${encodedParams}`;
-  searchConfig.queryString = queryString;
+  urlOptionsMap.queryString = queryString;
 
   return {
     type: '@@cache/RETRIEVE',
-    searchConfig,
+    urlOptionsMap,
     service: 'search',
     cacheKey: queryString,
     fetchHandlers: {
@@ -49,17 +51,17 @@ export const initiateSiteWideSearchQuery = searchConfig => {
   };
 };
 
-export const initiateBestBetsQuery = searchConfig => {
+export const initiateBestBetsQuery = urlOptionsMap => {
   return {
     type: '@@cache/RETRIEVE',
-    searchConfig,
+    urlOptionsMap,
     service: 'bestBets',
-    cacheKey: searchConfig.term,
+    cacheKey: urlOptionsMap.term,
     fetchHandlers: {
       formatResponse: body => {
         // Until the API is changed. We need to do a fair bit of data wrangling to
         // extract the relevant information and put it into a JSON shape.
-        const jsonified = body.map((bestBetCategory, catIdx) => {
+        const jsonified = body.map(bestBetCategory => {
           // We are filtering out the html from the processed result, but that's not really necessary
           // and is slightly more processing intensive (marginally).
           const { html, ...rest } = bestBetCategory;
@@ -90,12 +92,12 @@ export const initiateBestBetsQuery = searchConfig => {
   };
 };
 
-export const initiateDictionaryQuery = searchConfig => {
+export const initiateDictionaryQuery = urlOptionsMap => {
   return {
     type: '@@cache/RETRIEVE',
-    searchConfig,
+    urlOptionsMap,
     service: 'dictionary',
-    cacheKey: searchConfig.term,
+    cacheKey: urlOptionsMap.term,
     fetchHandlers: {
       formatResponse: body => {
         // We can inspect the metaProperty.result_count value to determine if
@@ -106,3 +108,22 @@ export const initiateDictionaryQuery = searchConfig => {
     },
   };
 };
+
+/**
+ * Given parameters, we want to create a new querystring and use it
+ * to update the URL with. This will in turn kick off a new call to the 
+ * API services and update the page results.
+ * We also need to clear the current results (if the URL has changed (this won't be
+ * a perfect science if we can't guarantee we build the querystring exactly the same
+ * way each time)) so that the page doesn't show stale results with a new URL.
+ * 
+ * For readability, we will call this newSearch even though it really is more of 
+ * a simple updating of the URL.
+ */
+export const newSearch = (urlOptionsMap) => {
+  const url = constructURL(urlOptionsMap)
+  return {
+    type: '@@router/location_change',
+    payload: url,
+  }
+}

@@ -17,13 +17,13 @@ const createApiMiddleware = services => ({ dispatch, getState }) => next => asyn
 
   const { 
     service: serviceName,
-    searchConfig,
+    urlOptionsMap,
     cacheKey,
     fetchHandlers,
   } = action;
   const service = services[serviceName];
   if(service != null){
-    const endpoint = service(searchConfig);
+    const endpoint = service(urlOptionsMap);
     try {
       const response = await axios.get(endpoint);
       const body = response.data;
