@@ -33,7 +33,7 @@ const initialize = ({
       cachedState = loadStateFromSessionStorage(appId);
   }
 
-  // Set up middlewares.
+  // Set up middleware chain for redux dispatch.
   const history = createBrowserHistory();
   const historyMiddleware = createHistoryMiddleware(history);
   const eventReporterMiddleware = createEventReporterMiddleware(eventHandler);
@@ -69,7 +69,7 @@ const initialize = ({
     };
 
     store.subscribe(saveDesiredStateToSessionStorage);
-}
+  }
 
 
   const App = () => {
@@ -85,7 +85,14 @@ const initialize = ({
   ReactDOM.render(<App />, document.getElementById(rootId));
 };
 
+// The following lets us run the app in dev not in situ as would normally be the case.
 if (process.env.NODE_ENV !== 'production') {
+  try{
+    import('./__nci-dev__common.css');
+  }
+  catch(err){
+    console.log("Can't find common.css file")
+  }
   const rootId = 'NCI-search-results-root';
   const eventHandler = () => {};
   const search = searchConfig => {
