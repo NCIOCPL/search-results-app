@@ -61,7 +61,8 @@ export const parseURL = url => {
 };
 
 export const constructURL = urlOptionsMap => {
-  const { term, ...params } = urlOptionsMap;
+  const { term, size = 10, from = 0 } = urlOptionsMap;
+  const params = { size, from };
   const encodedTerm = encodeURI(term);
   const encodedParams = querystring.stringify(params);
   const url = `${encodedTerm}?${encodedParams}`;
