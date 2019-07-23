@@ -5,7 +5,6 @@ import { formatPagerArray } from '../../utilities';
 import { useUrlOptionsMap } from '../../utilities/hooks';
 import './Pager.css';
 
-// TODO: Add click handlers to execute new search actions.
 // TODO: Add keyhandler
 
 const Pager = ({
@@ -34,9 +33,7 @@ const Pager = ({
     return null;
   }
 
-  // TODO: Double check these assumptions still hold.
-  // Also, there may never be starts that are not steps of the pagesize.
-  const isFirstPage = from <= size;
+  const isFirstPage = from < size;
   const isLastPage = from >= totalResults - size;
   const totalPages = Math.ceil(totalResults / size);
   const currentPage = Math.ceil((from + 1) / size); // This is probably not neccesary.
@@ -46,12 +43,12 @@ const Pager = ({
       <div className='pager__nav'>
         {
           !isFirstPage &&
-            <div className="pager__arrow">{ '<' }</div>
+            <div className="pager__arrow" onClick={ () => executeNewSearch(currentPage - 1) }>{ '<' }</div>
         }
         {
           pages.map((pageNumber, idx) => {
-            const isCurrent = pageNumber === currentPage; // To be used for disabling click action
-            // A 0 represents an ellipses
+            const isCurrent = pageNumber === currentPage;
+            // A 0 represents ellipses.
             if(pageNumber > 0){
               return (
                 <div 
@@ -68,7 +65,7 @@ const Pager = ({
         }
         {
           !isLastPage &&
-            <div className="pager__arrow">{ '>' }</div>
+            <div className="pager__arrow" onClick={ () => executeNewSearch(currentPage + 1) }>{ '>' }</div>
         }
       </div>
     </nav>
