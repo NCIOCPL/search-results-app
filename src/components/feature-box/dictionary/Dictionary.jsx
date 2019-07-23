@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDictionary } from '../../../utilities/hooks';
 
 const Dictionary = () => {
+  const [isToggleableTextVisible, setToggleVisibility] = useState(false);
+  // Yes. I'm having fun. No, my wife is not a hat. Why do you ask? It's Tuesday. Everybody knows
+  // she is a chinchilla on Tuesdays. She's only a hat on Thursdays. I never could get the hang of Thursdays.
+  const toggleToggle = useCallback((e) => {
+    e.preventDefault();
+    setToggleVisibility(!isToggleableTextVisible);
+  }, [isToggleableTextVisible])
   const dictionary = useDictionary();
   if(!dictionary){
     return null;
@@ -33,35 +40,41 @@ const Dictionary = () => {
         <dt className="term">
           <strong>{ term }</strong>
         </dt>
-        <dd className="pronunciation">
-          <a
-            onClick={ () => false }
-            className="CDR_audiofile"
-            data-nci-link-audio-file=""
-            data-pathname={ pronunciation.audio }
-          >
-            <span className="hidden">listen</span>
-          </a>
-          {' '}{ pronunciation.key }{' '}
-        </dd>
-        <dd className="definition">
-          <span>{ hasMultipleSentences ? firstSentencePartialText : sanitizedDefinitionText }</span>
+        {
+          // It's possible a pronunciation object is not available
+          // (Based on reverse engineering reqs from bestBets.js).
+          pronunciation &&
+            <dd className="pronunciation">
+              <a
+                onClick={ () => false }
+                className="CDR_audiofile"
+                data-nci-link-audio-file=""
+                data-pathname={ pronunciation.audio }
+              >
+                <span className="hidden">listen</span>
+              </a>
+              {' '}{ pronunciation.key }{' '}
+            </dd>
+        }
+        <dd className="feature-box__definition-container">
+          <span className="feature-box__definition-text">{ hasMultipleSentences ? firstSentencePartialText : sanitizedDefinitionText }</span>
           {
             hasMultipleSentences &&
-              <span>{ definitionRemainderText }</span>
+              <span 
+                className={ `feature-box__definition-text ${ isToggleableTextVisible ? '' : 'feature-box__definition-text--hidden' }` }
+              >{ definitionRemainderText }</span>
           }
-          {/* HOW DOES THIS GET DIVIDED?? (probably the stupid jquery 'library') */}
-          {/* <span id="definitionStart">
-            An abnormal mass of tissue that results when cells divide more than
-            they should or do not die when they should.
-          </span>
-          <span id="definitionEnd">
-            {' '}
-            Tumors may be benign (not cancer), or malignant (cancer). Also
-            called neoplasm.
-          </span> */}
         </dd>
       </dl>
+      {
+        // TODO: Need to firm up reqs for when this should show rather than
+        // only on multiple sentences.
+        hasMultipleSentences &&
+          <div className="feature-box__definition-toggle">
+            {/* TODO: This text is conditional */}
+            <a onClick={ toggleToggle }>{ isToggleableTextVisible ? 'Hide' : 'Show' } full definition</a>
+          </div>
+      }
     </div>
   );
 };

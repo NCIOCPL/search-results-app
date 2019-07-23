@@ -45,23 +45,34 @@
   display: inline-block
 }
 
-.feature-box__definition dd.definition {
+.feature-box__definition .feature-box__definition-container {
   margin-top: 7px
 }
 
-.feature-box__definition .best-bets-toggle {
+.feature-box__definition .feature-box__definition-toggle {
   border-top: 1px solid #c7c6c6;
   margin-left: -19px;
   margin-right: -19px;
   padding: 10px 19px 0
 }
 
-.feature-box__definition .best-bets-toggle a {
+.feature-box__definition .feature-box__definition-toggle a {
   text-decoration: none;
   color: inherit
 }
 
-.feature-box__definition .best-bets-toggle a:before {
+.feature-box__definition-text {
+  opacity: 1;
+  transition: all .15s;
+}
+
+.feature-box__definition-text--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* This is the sprite */
+/* .feature-box__definition .feature-box__definition-toggle a:before {
   content: "";
   display: inline-block;
   width: 1.25em;
@@ -73,11 +84,11 @@
   font-size: .6em
 }
 
-.feature-box__definition .best-bets-toggle a.expanded:before {
+.feature-box__definition .feature-box__definition-toggle a.expanded:before {
   -webkit-transform: rotate(0);
   transform: rotate(0);
   margin-bottom: 3px
-}
+} */
 
 .feature-box__definition {
   margin: 0
@@ -124,7 +135,6 @@
 
 .results dd.info-summary,.results dd.pronunciation,.results dt {
   display: inline;
-  margin-bottom: 0
 }
 
 .results dd.info-summary,.results dd.pronunciation {
