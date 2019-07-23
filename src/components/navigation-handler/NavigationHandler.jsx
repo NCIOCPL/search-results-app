@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearErrors } from '../../state/store/error';
 
 /**
  * TODO:
@@ -15,9 +16,11 @@ import { useSelector } from 'react-redux';
  * @param {*} props 
  */
 const NavigationHandler = ({ children }) => {
+  const dispatch = useDispatch();
   const location = useSelector(store => store.router.location);
   useEffect(() => {
     window.scrollTo(0,0);
+    dispatch(clearErrors());
   }, [location]);
 
   return children;

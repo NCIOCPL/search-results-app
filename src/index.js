@@ -13,6 +13,7 @@ import cacheMiddleware from './state/middleware/cache';
 import { createBrowserHistory } from 'history';
 import createHistoryMiddleware from './state/middleware/history';
 import NavigationHandler from './components/navigation-handler';
+import ErrorBoundary from './components/error-boundary';
 import Results from './views/results';
 import { loadStateFromSessionStorage, saveStatetoSessionStorage } from './utilities';
 import './index.css';
@@ -90,9 +91,11 @@ const initialize = ({
   const App = () => {
     return (
       <Provider store={ store }>
-        <NavigationHandler>
-          <Results />
-        </NavigationHandler>
+        <ErrorBoundary dispatch={ store.dispatch }>
+          <NavigationHandler>
+            <Results />
+          </NavigationHandler>
+        </ErrorBoundary>
       </Provider>
     );
   };
