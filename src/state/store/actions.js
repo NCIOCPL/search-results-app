@@ -21,7 +21,7 @@ export const initiateAPICalls = dispatch => urlOptionsMap => {
   dispatch(initiateDictionaryQuery(urlOptionsMap));
   // TODO: Don't call this except when the service has been specified in the initialization. (Only CGOV gets best bets)
   // We only want to call bestBets when it's the first page of results.
-  const isFirstPage = urlOptionsMap.page === 1;
+  const isFirstPage = urlOptionsMap.from < urlOptionsMap.size;
   if (isFirstPage) {
     dispatch(initiateBestBetsQuery(urlOptionsMap));
   }
