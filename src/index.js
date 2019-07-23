@@ -89,7 +89,7 @@ const initialize = ({
 
   const App = () => {
     return (
-      <Provider store={store}>
+      <Provider store={ store }>
         <NavigationHandler>
           <Results />
         </NavigationHandler>

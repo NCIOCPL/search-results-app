@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 /**
  * TODO:
@@ -13,7 +14,12 @@ import React from 'react';
  * 
  * @param {*} props 
  */
-const NavigationHandler = props => {
-    return props.children;
+const NavigationHandler = ({ children }) => {
+  const location = useSelector(store => store.router.location);
+  useEffect(() => {
+    window.scrollTo(0,0);
+  }, [location]);
+
+  return children;
 }
 export default NavigationHandler;
