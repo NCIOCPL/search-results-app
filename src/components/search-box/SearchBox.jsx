@@ -15,9 +15,8 @@ const SearchBox = () => {
     const searchType = radio === 1 ? 'search' : 'search_within';
     const term = searchType === 'search' ? newTerm : `${ newTerm } ${ oldTerm }`;
     const params = {
-      page: 1,
-      pageunit: currentUrlOptions ? currentUrlOptions.pageunit : 10,
-      Offset: 0,
+      from: 0,
+      size: currentUrlOptions ? currentUrlOptions.size : 10,
       term,
     }
     dispatch(newSearch(params));
