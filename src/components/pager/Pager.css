@@ -41,7 +41,6 @@
 }
 
 .pager__num.pager__ellipses:hover, .pager__num.pager__num--active:hover {
-  background: none;
   cursor: default;
 }
 

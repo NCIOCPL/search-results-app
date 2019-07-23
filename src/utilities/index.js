@@ -67,3 +67,32 @@ export const constructURL = urlOptionsMap => {
   const url = `${encodedTerm}?${encodedParams}`;
   return url;
 }
+
+/**
+ * Generate an array representing the currently selectable page skip numbers. 0 is
+ * used to represent an ellipses and will be rendered as such. Previous and next are handled
+ * externally.
+ * 
+ * @param {number} total 
+ * @param {number} current
+ * @return {number[]} pages
+ */
+export const formatPagerArray = (total, current) => {
+  const pagesFromStart = current;
+  const pagesFromEnd = total - current;
+  let pages;
+  if(pagesFromStart > 5){
+      pages = [1, 0, current - 2, current - 1, current];
+  }
+  else {
+      pages = Array(current).fill().map((el, idx) => idx + 1); 
+  }
+  if(pagesFromEnd > 5) {
+      pages = [...pages, current + 1, current + 2, 0, total];
+  }
+  else {
+      const remainingPages = Array(pagesFromEnd).fill().map((el, idx) => current + idx + 1);
+      pages = [ ...pages, ...remainingPages ]; 
+  }
+  return pages;
+}

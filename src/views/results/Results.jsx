@@ -42,7 +42,7 @@ const Results = () => {
   // in its closure.
   useEffect(() => {
     initiateAPICalls(dispatch)(urlOptionsMap);
-  }, [dispatch, url])
+  }, [dispatch, url, urlOptionsMap])
 
   // 2. Get current results from cache.
   const currentSearch = useCurrentSearchResults();
@@ -50,30 +50,27 @@ const Results = () => {
   // 3a. Set up parameters for rendering pagers/counters.
   const {
     term,
-    page,
-    pageunit,
-    Offset: offset,
+    from,
+    size,
   } = urlOptionsMap;
-
   // 3b. Calculate the numbers used for the results info displays.
-  const resultsStart = 1 + offset;
+  const resultsStart = from + 1;
+  const isFirstPage = from < size;
   // If we are on the last page of results, the range might be less than the offset
   // This breaks if we don't have a current search (total) yet so we delay the calculation by wrapping it in a function call or component...
   const getResultsEnd = (step, total) => step <= total ? step : total;
-  
   return(
     currentSearch
       ? (
           <div>
             <p className="results__info-label">Results for: { term }</p>
-            <FeatureBox bestBetsIsVisible={ page === 1 } />
-            <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { term }</p>
+            <FeatureBox bestBetsIsVisible={ isFirstPage } />
+            <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { term }</p>
             <ResultsList { ...currentSearch } />
-            <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(offset + pageunit, currentSearch.totalResults) }`} of { currentSearch.totalResults }</p>
+            <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} of { currentSearch.totalResults }</p>
             <Pager 
-              page={ page }
-              pageSize={ pageunit }
-              start={ resultsStart }
+              from={ from }
+              size={ size }
               totalResults={ currentSearch.totalResults }
             />
             <p className="results__info-label">{ currentSearch.totalResults } Results found for: { term }</p>

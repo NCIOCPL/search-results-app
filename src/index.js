@@ -62,7 +62,6 @@ const initialize = ({
   // We want any changes to the browser location to be used to rerender the page.
   history.listen(location  => {
     const url = location.pathname + location.search;
-    console.log(url)
     store.dispatch({
       type: '@@router/update_location',
       payload: url,
