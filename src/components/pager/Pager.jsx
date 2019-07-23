@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import DropDown from './drop-down';
 import { newSearch } from '../../state/store/actions';
 import { formatPagerArray } from '../../utilities';
 import { useUrlOptionsMap } from '../../utilities/hooks';
@@ -14,7 +15,7 @@ const Pager = ({
 }) => {
   const dispatch = useDispatch();
   const currentUrlOptions = useUrlOptionsMap();
-  const executeNewSearch = useCallback((page) => {
+  const pagerNewSearch = useCallback((page) => {
     const params = {
       ...currentUrlOptions,
       size,
@@ -24,6 +25,14 @@ const Pager = ({
     dispatch(newSearch(params));
   }, [dispatch, currentUrlOptions, size]);
 
+  const dropdownNewSearch = useCallback((size) => {
+    const params = {
+      ...currentUrlOptions,
+      from: 0,
+      size,
+    }
+    dispatch(newSearch(params));
+  }, [dispatch, size, currentUrlOptions])
 
   const isSinglePageOnly = totalResults <= size;
   if(isSinglePageOnly){
@@ -40,10 +49,11 @@ const Pager = ({
   const pages = formatPagerArray(totalPages, currentPage);
   return (
     <nav className="pager__container">
+      <DropDown newSearch={ dropdownNewSearch } options={ [10, 20, 50 ] } />
       <div className='pager__nav'>
         {
           !isFirstPage &&
-            <div className="pager__arrow" onClick={ () => executeNewSearch(currentPage - 1) }>{ '<' }</div>
+            <div className="pager__arrow" onClick={ () => pagerNewSearch(currentPage - 1) }>{ '<' }</div>
         }
         {
           pages.map((pageNumber, idx) => {
@@ -54,7 +64,7 @@ const Pager = ({
                 <div 
                   key={ idx } 
                   className={ `pager__num ${ isCurrent ? 'pager__num--active' : ''}`}
-                  onClick={ !isCurrent ? () => executeNewSearch(pageNumber) : null }
+                  onClick={ !isCurrent ? () => pagerNewSearch(pageNumber) : null }
                 >{ pageNumber }</div>
               )
             }
@@ -65,7 +75,7 @@ const Pager = ({
         }
         {
           !isLastPage &&
-            <div className="pager__arrow" onClick={ () => executeNewSearch(currentPage + 1) }>{ '>' }</div>
+            <div className="pager__arrow" onClick={ () => pagerNewSearch(currentPage + 1) }>{ '>' }</div>
         }
       </div>
     </nav>
