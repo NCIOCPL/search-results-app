@@ -7,11 +7,11 @@ const DropDown = ({ options, newSearch, size }) => {
   return (
     <div>
       <span>Show</span>
-      <select onChange={ e => newSearch(e.target.value) }>
+      <select value={ size } onChange={ e => newSearch(e.target.value) }>
         {
           options.map((option, opIdx) => {
             return(
-              <option key={ opIdx } value={ option } selected={ option === size }>{ option }</option>
+              <option key={ opIdx } value={ option } >{ option }</option>
             )
           })
         }
