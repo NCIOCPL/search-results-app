@@ -11,8 +11,9 @@ const Dictionary = () => {
     definition,
     pronunciation,
   } = dictionary;
+  // TODO: Remove the tables?
   return (
-    <div className="best-bet-definition">
+    <div className="feature-box__definition">
       <h2>Definition:</h2>
       <dl>
         <dt className="term">
@@ -20,8 +21,7 @@ const Dictionary = () => {
         </dt>
         <dd className="pronunciation">
           <a
-            // this is triggering a big ole react warning
-            href="javascript:void(0)"
+            onClick={ () => false }
             className="CDR_audiofile"
             data-nci-link-audio-file=""
             data-pathname={ pronunciation.audio }

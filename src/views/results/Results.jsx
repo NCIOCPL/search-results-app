@@ -62,7 +62,7 @@ const Results = () => {
   return(
     currentSearch
       ? (
-          <div>
+          <>
             <p className="results__info-label">Results for: { term }</p>
             <FeatureBox bestBetsIsVisible={ isFirstPage } />
             <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { term }</p>
@@ -75,7 +75,7 @@ const Results = () => {
             />
             <p className="results__info-label">{ currentSearch.totalResults } Results found for: { term }</p>
             <SearchBox />
-          </div>
+          </>
         )
       : <Spinner />
   )

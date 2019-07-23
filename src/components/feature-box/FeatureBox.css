@@ -1,0 +1,162 @@
+.feature-box__container {
+  overflow: auto;
+  background: #dbf2f8;
+  padding: 2.5%
+}
+
+@media (min-width: 641px){
+  .feature-box__container {
+    display: flex;
+  }
+}
+
+.feature-box__container h2 {
+  margin-top: 0
+}
+
+.feature-box__container .list-item .title {
+  font-size: 1em
+}
+
+.feature-box__container .list,.feature-box__container .list-item {
+  margin-bottom: 0
+}
+
+.feature-box__definition {
+  background: #fff;
+  padding: 16px 19px 10px;
+  margin-left: 10px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 4px 0 hsla(0,0%,71%,.75);
+  box-shadow: 0 0 4px 0 hsla(0,0%,71%,.75)
+}
+
+.feature-box__definition h2 {
+  margin-bottom: .5em;
+  margin-top: 0
+}
+
+.feature-box__definition dt.term {
+  margin-right: 8px
+}
+
+.feature-box__definition dd.pronunciation {
+  margin-left: 0;
+  display: inline-block
+}
+
+.feature-box__definition dd.definition {
+  margin-top: 7px
+}
+
+.feature-box__definition .best-bets-toggle {
+  border-top: 1px solid #c7c6c6;
+  margin-left: -19px;
+  margin-right: -19px;
+  padding: 10px 19px 0
+}
+
+.feature-box__definition .best-bets-toggle a {
+  text-decoration: none;
+  color: inherit
+}
+
+.feature-box__definition .best-bets-toggle a:before {
+  content: "";
+  display: inline-block;
+  width: 1.25em;
+  height: .78125em;
+  background-position: 5.84795% 10.41443%;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+  margin: 0 8px 1px 0;
+  font-size: .6em
+}
+
+.feature-box__definition .best-bets-toggle a.expanded:before {
+  -webkit-transform: rotate(0);
+  transform: rotate(0);
+  margin-bottom: 3px
+}
+
+.feature-box__definition {
+  margin: 0
+}
+
+@media only screen and (max-width: 640px) {
+  .feature-box__definition {
+      margin-top:1em
+  }
+}
+
+#definitionEnd {
+  display: none
+}
+
+.feature-box__container {
+  margin-left: -.9375em;
+  margin-right: -.9375em;
+  padding: 2.5% .9375em
+}
+
+@media only screen and (min-width: 1025px) {
+  .feature-box__container {
+      margin-left:-3.125em;
+      margin-right: -3.125em;
+      padding: 2.5% 3.125em
+  }
+}
+
+@media only screen and (min-width: 641px) {
+  .feature-box__container>.large-8 {
+      padding-right:.9375em
+  }
+}
+
+.feature-box__container:not(:first-of-type) .feature-box__definition {
+  display: none
+}
+
+.feature-box__container:not(:first-of-type) .large-8 {
+  width: 100%
+}
+
+
+.results dd.info-summary,.results dd.pronunciation,.results dt {
+  display: inline;
+  margin-bottom: 0
+}
+
+.results dd.info-summary,.results dd.pronunciation {
+  margin-left: .5em
+}
+
+.results dd.info-summary>span,.results dd.pronunciation>span {
+  margin-left: .25em
+}
+
+.results dd {
+  margin-bottom: 1em
+}
+
+.results h2,.results h3,.results h4 {
+  font-size: 1.25em;
+  line-height: 1.5em;
+  margin-top: 40px;
+  margin-bottom: 30px
+}
+
+.results .results-count {
+  font-family: Montserrat,Avant Garde,Arial,sans-serif;
+  font-weight: 700;
+  font-size: 1.25em;
+  line-height: 1.5em
+}
+
+.results .result .row+.row {
+  margin-top: 1.25em
+}
+
+.dictionary-list dfn a {
+  font-weight: 400
+}
