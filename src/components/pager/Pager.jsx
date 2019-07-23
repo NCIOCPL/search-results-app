@@ -15,6 +15,7 @@ const Pager = ({
 }) => {
   const dispatch = useDispatch();
   const currentUrlOptions = useUrlOptionsMap();
+
   const pagerNewSearch = useCallback((page) => {
     const params = {
       ...currentUrlOptions,
@@ -49,7 +50,7 @@ const Pager = ({
   const pages = formatPagerArray(totalPages, currentPage);
   return (
     <nav className="pager__container">
-      <DropDown newSearch={ dropdownNewSearch } options={ [10, 20, 50 ] } />
+      <DropDown newSearch={ dropdownNewSearch } options={ [10, 20, 50 ] } size={ size } />
       <div className='pager__nav'>
         {
           !isFirstPage &&

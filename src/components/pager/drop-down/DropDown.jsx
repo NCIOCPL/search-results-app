@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DropDown = ({ options, newSearch }) => {
+const DropDown = ({ options, newSearch, size }) => {
   if(!options || !options.length){
     return null;
   }
@@ -11,7 +11,7 @@ const DropDown = ({ options, newSearch }) => {
         {
           options.map((option, opIdx) => {
             return(
-              <option key={ opIdx } value={ option }>{ option }</option>
+              <option key={ opIdx } value={ option } selected={ option === size }>{ option }</option>
             )
           })
         }
