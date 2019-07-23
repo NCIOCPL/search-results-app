@@ -34,7 +34,7 @@ export const reducer = (state = initialState, action) => {
     case UPDATE_RESULTS:
       return {
         ...state,
-        [action.payload.key]: action.payload.value,
+        [action.payload.serviceName]: action.payload.cacheKey,
       }
     default:
       return state;

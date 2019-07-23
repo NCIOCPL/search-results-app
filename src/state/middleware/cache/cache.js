@@ -15,7 +15,10 @@ const cacheMiddleware = ({ dispatch, getState }) => next => action => {
     if(cachedValue != null){
       dispatch({
         type: 'UPDATE RESULTS',
-        payload: cachedValue,
+        payload: {
+          serviceName: service,
+          cacheKey,
+        },
       })
       return;
     }

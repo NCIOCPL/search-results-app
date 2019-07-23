@@ -38,7 +38,6 @@ export const initiateSiteWideSearchQuery = urlOptionsMap => {
   const encodedParams = querystring.stringify(params);
   const queryString = `${encodedTerm}?${encodedParams}`;
   urlOptionsMap.queryString = queryString;
-
   return {
     type: '@@cache/RETRIEVE',
     urlOptionsMap,
