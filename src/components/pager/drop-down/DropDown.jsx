@@ -1,12 +1,18 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { translate } from '../../../utilities/translation';
 
 const DropDown = ({ options, newSearch, size }) => {
+  // Setup translation function
+  const language = useSelector(store => store.globals.language);
+  const t = translate(language);
+
   if(!options || !options.length){
     return null;
   }
   return (
     <div>
-      <span>Show</span>
+      <span>{ t('Show') }</span>
       <select value={ size } onChange={ e => newSearch(e.target.value) }>
         {
           options.map((option, opIdx) => {
@@ -16,7 +22,7 @@ const DropDown = ({ options, newSearch, size }) => {
           })
         }
       </select>
-      <span>results per page.</span>
+      <span>{ t('results per page') }.</span>
     </div>
   )
 }

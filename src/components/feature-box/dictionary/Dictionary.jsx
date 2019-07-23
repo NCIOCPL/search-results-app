@@ -1,7 +1,11 @@
 import React, { useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { useDictionary } from '../../../utilities/hooks';
+import { translate } from '../../../utilities/translation';
 
 const Dictionary = () => {
+  const language = useSelector(store => store.globals.language);
+  const t = translate(language);
   const [isToggleableTextVisible, setToggleVisibility] = useState(false);
   // Yes. I'm having fun. No, my wife is not a hat. Why do you ask? It's Tuesday. Everybody knows
   // she is a chinchilla on Tuesdays. She's only a hat on Thursdays. I never could get the hang of Thursdays.
@@ -35,7 +39,7 @@ const Dictionary = () => {
   // TODO: No pronunciation if one doesn't exist.
   return (
     <div className="feature-box__definition">
-      <h2>Definition:</h2>
+      <h2>{ t('Definition') }:</h2>
       <dl>
         <dt className="term">
           <strong>{ term }</strong>
@@ -72,7 +76,7 @@ const Dictionary = () => {
         hasMultipleSentences &&
           <div className="feature-box__definition-toggle">
             {/* TODO: This text is conditional */}
-            <a onClick={ toggleToggle }>{ isToggleableTextVisible ? 'Hide' : 'Show' } full definition</a>
+            <a onClick={ toggleToggle }>{ isToggleableTextVisible ? t('Hide full definition') : t('Show full definition') }</a>
           </div>
       }
     </div>

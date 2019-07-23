@@ -27,7 +27,7 @@ const initialize = ({
   // can move most of the custom processing into the bridge code for easier adjustment per site based on
   // changing requirements.
   services = {},
-  // language,
+  language = 'es',
 } = {}) => {
   let cachedState;
   if(process.env.NODE_ENV !== 'development' && useSessionStorage === true) {
@@ -53,6 +53,20 @@ const initialize = ({
       )
     )
   );
+  
+  // Here we are going to use the store as nothing more than a piece
+  // of global configuration state to read from.
+
+  // To access translations, first take the language from the store and then
+  // use the translate utility function (which is composed with that map of translations).
+  // To add translations, edit the translations.config.js file.
+  store.dispatch({
+    type: '@@globals/load_value',
+    payload: {
+      key: 'language',
+      value: language,
+    },
+  })
 
   store.dispatch({
     type: '@@router/update_location',
@@ -76,8 +90,8 @@ const initialize = ({
   if(process.env.NODE_ENV !== 'development' && useSessionStorage === true) {
     const saveDesiredStateToSessionStorage = () => {
         const allState = store.getState();
-        // No need to store error to session storage
-        const { error, ...state } = allState;
+        // No need to store error or translation map to session storage
+        const { error, translation, ...state } = allState;
         saveStatetoSessionStorage({
             state,
             appId,
@@ -93,7 +107,7 @@ const initialize = ({
       <Provider store={ store }>
         <ErrorBoundary dispatch={ store.dispatch }>
           <NavigationHandler>
-            <Results />
+            <Results language={ language } />
           </NavigationHandler>
         </ErrorBoundary>
       </Provider>

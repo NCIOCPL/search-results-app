@@ -9,6 +9,7 @@ import {
 } from '../../components';
 import { initiateAPICalls } from '../../state/store/actions';
 import { parseURL } from '../../utilities';
+import { translate } from '../../utilities/translation';
 import { useCurrentSearchResults } from '../../utilities/hooks';
 import './Results.css';
 
@@ -20,12 +21,17 @@ const getURL = () => {
   return mocks["tumor"].searchParams // window.location.search;
 }
 
-const Results = () => {
+const Results = ({ language }) => {
   const dispatch = useDispatch();
   // The view will be rendered entirely by state derived from the URL. Both immediately and
   // asynchronously as a result of API calls initiated by the URL search params. To that end
   // we want to listen primarily for changes to the URL so we can start the process of deriving
   // and collecting that state.
+
+  // Set up the t function for translating. We need the language. Normally we get this from the
+  // store. However, as this view is available in the app, there's no reason not to pass it
+  // straight down.
+  const t = translate(language);
 
   // 1. Grab current search param string:
   // We do this outside of the hook so that the hook is reactive only to changes in the querystring (we don't want
@@ -66,17 +72,17 @@ const Results = () => {
     currentSearch
       ? (
           <>
-            <p className="results__info-label">Results for: { term }</p>
+            <p className="results__info-label">{ t('Results for') }: { term }</p>
             <FeatureBox bestBetsIsVisible={ isFirstPage } />
-            <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} of { currentSearch.totalResults } for: { term }</p>
+            <p className="results__info-label">{ t('Results') } {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults } { t('for') }: { term }</p>
             <ResultsList { ...currentSearch } />
-            <p className="results__info-label">Results {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} of { currentSearch.totalResults }</p>
+            <p className="results__info-label">{ t('Results') } {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults }</p>
             <Pager 
               from={ from }
               size={ size }
               totalResults={ currentSearch.totalResults }
             />
-            <p className="results__info-label">{ currentSearch.totalResults } Results found for: { term }</p>
+            <p className="results__info-label">{ currentSearch.totalResults } { t('results found for') }: { term }</p>
             <SearchBox />
           </>
         )

@@ -1,13 +1,18 @@
 import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { newSearch } from '../../state/store/actions';
 import { useUrlOptionsMap } from '../../utilities/hooks';
+import { translate } from '../../utilities/translation';
 
 const SearchBox = () => {
   const dispatch = useDispatch();
   const [radio, setRadio] = useState(1);
   const [textInput, updateTextInput] = useState('');
   const currentUrlOptions = useUrlOptionsMap();
+
+  // Set up translation function
+  const language = useSelector(store => store.globals.language);
+  const t = translate(language);
 
   const executeNewSearch = useCallback(() => {
     const newTerm = textInput;
@@ -23,11 +28,11 @@ const SearchBox = () => {
   }, [dispatch, textInput, currentUrlOptions, radio]);
   
   return (
-    <form onSubmit={(e) => {
+    <form onSubmit={e => {
       e.preventDefault();
       executeNewSearch();
       updateTextInput('');
-    } }>
+    }}>
 			<span className="radio">
         <input 
           id="ctl34_rblSWRSearchType_0" 
@@ -37,7 +42,7 @@ const SearchBox = () => {
           checked={ radio === 1 }
           onChange={ () => setRadio(1) }
         />
-        <label htmlFor="ctl34_rblSWRSearchType_0">{ "New Search     " }</label>
+        <label htmlFor="ctl34_rblSWRSearchType_0">{ t('New Search') }</label>
         <input 
           id="ctl34_rblSWRSearchType_1" 
           type="radio" 
@@ -46,7 +51,7 @@ const SearchBox = () => {
           checked={ radio === 2 }
           onChange={ () => setRadio(2) }
         />
-        <label htmlFor="ctl34_rblSWRSearchType_1">Search Within Results</label>
+        <label htmlFor="ctl34_rblSWRSearchType_1">{ t('Search Within Results') }</label>
       </span>
       <div className="row collapse">
         <div className="small-12">
@@ -66,7 +71,7 @@ const SearchBox = () => {
           <input 
             type="submit" 
             name="ctl34$btnSWRTxtSearch" 
-            value="Search" 
+            value={ t('Search') } 
             className="button submit"
           />
         </div>
