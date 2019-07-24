@@ -61,7 +61,6 @@ const SearchBox = () => {
             name="ctl34$txtSWRKeyword" 
             className="input" 
             type="text" 
-            maxLength="40" 
             size="40" 
             placeholder="Enter keywords or phrases" 
             aria-label="Enter keywords or phrases"
