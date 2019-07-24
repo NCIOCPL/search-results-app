@@ -51,7 +51,7 @@ const Results = ({ language }) => {
     if(!isSearchLandingPage){
       initiateAPICalls(dispatch)(urlOptionsMap);
     }
-  }, [dispatch, url, urlOptionsMap])
+  }, [dispatch, url])
 
   // 2. Get current results from cache.
   const currentSearch = useCurrentSearchResults();
