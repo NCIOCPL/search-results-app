@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useRef  } from 'react';
+import { useSelector, useDispatch} from 'react-redux';
 import {
   Spinner,
   Pager,
@@ -13,14 +13,6 @@ import { translate } from '../../utilities/translation';
 import { useCurrentSearchResults } from '../../utilities/hooks';
 import './Results.css';
 
-// TEMP: Used for mocking state while doing UI dev
-import mocks from '../../state/mocks';
-
-// TODO: Move to utility functions
-const getURL = () => {
-  return mocks["tumor"].searchParams // window.location.search;
-}
-
 const Results = ({ language }) => {
   const dispatch = useDispatch();
   // The view will be rendered entirely by state derived from the URL. Both immediately and
@@ -32,6 +24,9 @@ const Results = ({ language }) => {
   // store. However, as this view is available in the app, there's no reason not to pass it
   // straight down.
   const t = translate(language);
+
+  // We use this ref to allow us to reset the keyboard focus on page changes.
+  const tabResetElement = useRef(null);
 
   // 1. Grab current search param string:
   // We do this outside of the hook so that the hook is reactive only to changes in the querystring (we don't want
@@ -50,6 +45,10 @@ const Results = ({ language }) => {
   useEffect(() => {
     if(!isSearchLandingPage){
       initiateAPICalls(dispatch)(urlOptionsMap);
+    }
+    // Reset the keybaord focus to the top of the page on page changes.
+    if(tabResetElement.current){
+      tabResetElement.current.focus();
     }
   }, [dispatch, url])
 
@@ -74,7 +73,9 @@ const Results = ({ language }) => {
           <>
             <p className="results__info-label">{ t('Results for') }: { term }</p>
             <FeatureBox bestBetsIsVisible={ isFirstPage } />
-            <p className="results__info-label">{ t('Results') } {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults } { t('for') }: { term }</p>
+            {/* Typically we would not make a p element tabbable. However, on page changes we want the tab focus to reset
+            to this element so that the screen reader begins at the first non-redundant point. */}
+            <p ref={ tabResetElement } tabIndex="0" className="results__info-label">{ t('Results') } {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults } { t('for') }: { term }</p>
             <ResultsList { ...currentSearch } />
             <p className="results__info-label">{ t('Results') } {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults }</p>
             <Pager 
