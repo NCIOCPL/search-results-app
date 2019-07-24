@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import DropDown from './drop-down';
 import { newSearch } from '../../state/store/actions';
-import { formatPagerArray } from '../../utilities';
+import { formatPagerArray, keyHandler } from '../../utilities';
 import { useUrlOptionsMap } from '../../utilities/hooks';
 import './Pager.css';
 
@@ -60,7 +60,14 @@ const Pager = ({
       <div className='pager__nav'>
         {
           !isFirstPage &&
-            <div className="pager__arrow" onClick={ () => pagerNewSearch(currentPage - 1) }>{ '<' }</div>
+            <div 
+              className="pager__arrow" 
+              tabIndex="0" 
+              onClick={ () => pagerNewSearch(currentPage - 1) }
+              onKeyPress={ keyHandler({
+                fn: () => pagerNewSearch(currentPage - 1),
+              }) }
+            >{ '<' }</div>
         }
         {
           pages.map((pageNumber, idx) => {
@@ -69,20 +76,31 @@ const Pager = ({
             if(pageNumber > 0){
               return (
                 <div 
-                  key={ idx } 
+                  key={ idx }
+                  tabIndex="0"
                   className={ `pager__num ${ isCurrent ? 'pager__num--active' : ''}`}
                   onClick={ !isCurrent ? () => pagerNewSearch(pageNumber) : null }
+                  onKeyPress={ keyHandler({
+                    fn: !isCurrent ? () => pagerNewSearch(pageNumber) : null,
+                  })}
                 >{ pageNumber }</div>
               )
             }
             return (
-              <div key={ idx } className='pager__num pager__ellipses'>{ '...' }</div>
+              <div key={ idx } tabIndex="0" className='pager__num pager__ellipses'>{ '...' }</div>
             )
           })
         }
         {
           !isLastPage &&
-            <div className="pager__arrow" onClick={ () => pagerNewSearch(currentPage + 1) }>{ '>' }</div>
+            <div 
+              className="pager__arrow" 
+              tabIndex="0" 
+              onClick={ () => pagerNewSearch(currentPage + 1) }
+              onKeyPress={ keyHandler({
+                fn: () => pagerNewSearch(currentPage + 1),
+              })}
+            >{ '>' }</div>
         }
       </div>
     </nav>

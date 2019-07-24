@@ -26,6 +26,9 @@ const initialize = ({
   // By passing in the API services as both configuration objects and a url generator (controller) we
   // can move most of the custom processing into the bridge code for easier adjustment per site based on
   // changing requirements.
+  // In addition, if you don't want a specific instance of the app to use a service, such as dictionary or bestbets
+  // on microsites, you simply don't pass a service in. The API middleware will only execute an API call if a service
+  // was passed in here according to that specific service type (search|dictionary|bestBets).
   services = {},
   language = 'en',
 } = {}) => {
