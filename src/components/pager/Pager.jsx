@@ -8,6 +8,12 @@ import './Pager.css';
 
 // TODO: Add keyhandler
 
+// We define these here to make it more obvious how the first
+// option is used to determine whether or not enough results were
+// returned to necessitate showing the navigation elements at all.
+const RESULT_SIZE_OPTIONS = [ 10, 20, 50 ];
+const LOWEST_STEP_SIZE = RESULT_SIZE_OPTIONS[0];
+
 const Pager = ({
   from,
   size,
@@ -35,13 +41,13 @@ const Pager = ({
     dispatch(newSearch(params));
   }, [dispatch, size, currentUrlOptions])
 
-  const isSinglePageOnly = totalResults <= size;
-  if(isSinglePageOnly){
-    // TODO: Remove the following note after code review.
-    // The current prod site keeps the dropdown for results per page even when
-    // there are zero results. I'm changing the requirements because that makes no sense.
+  const shouldDisplayNav = totalResults > LOWEST_STEP_SIZE;
+  // When the results are so few that navigation will never be necessary don't show anything.
+  if(!shouldDisplayNav){
     return null;
   }
+  // TODO: Determine what the behavior is on pages that fall between the lowest and highest option
+  // counts.
 
   const isFirstPage = from < size;
   const isLastPage = from >= totalResults - size;
@@ -50,7 +56,7 @@ const Pager = ({
   const pages = formatPagerArray(totalPages, currentPage);
   return (
     <nav className="pager__container">
-      <DropDown newSearch={ dropdownNewSearch } options={ [10, 20, 50 ] } size={ size } />
+      <DropDown newSearch={ dropdownNewSearch } options={ RESULT_SIZE_OPTIONS } size={ size } />
       <div className='pager__nav'>
         {
           !isFirstPage &&

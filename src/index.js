@@ -27,7 +27,7 @@ const initialize = ({
   // can move most of the custom processing into the bridge code for easier adjustment per site based on
   // changing requirements.
   services = {},
-  language = 'es',
+  language = 'en',
 } = {}) => {
   let cachedState;
   if(process.env.NODE_ENV !== 'development' && useSessionStorage === true) {
@@ -91,7 +91,7 @@ const initialize = ({
     const saveDesiredStateToSessionStorage = () => {
         const allState = store.getState();
         // No need to store error or translation map to session storage
-        const { error, translation, ...state } = allState;
+        const { error, globals, ...state } = allState;
         saveStatetoSessionStorage({
             state,
             appId,
