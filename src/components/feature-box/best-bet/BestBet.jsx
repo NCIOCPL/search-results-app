@@ -3,7 +3,7 @@ import BestBetListItem from './best-bet-list-item';
 
 const BestBet = ({ name, results = [] }) => {
   return (
-    <div>
+    <div className="feature-box__bestbet-container">
       <h3>{ name }</h3>
       {
         results.length &&
