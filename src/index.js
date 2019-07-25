@@ -73,13 +73,13 @@ const initialize = ({
 
   store.dispatch({
     type: '@@router/update_location',
-    payload: history.location.pathname + history.location.search,
+    payload: history.location.search,
   })
   
   // The history library acts as our API between us and the browser's History API.
   // We want any changes to the browser location to be used to rerender the page.
   history.listen(location  => {
-    const url = location.pathname + location.search;
+    const url = location.search;
     store.dispatch({
       type: '@@router/update_location',
       payload: url,

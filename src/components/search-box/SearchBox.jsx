@@ -8,24 +8,25 @@ const SearchBox = () => {
   const dispatch = useDispatch();
   const [radio, setRadio] = useState(1);
   const [textInput, updateTextInput] = useState('');
-  const currentUrlOptions = useUrlOptionsMap();
+  const [url, currentUrlOptions] = useUrlOptionsMap();
 
   // Set up translation function
   const language = useSelector(store => store.globals.language);
   const t = translate(language);
 
   const executeNewSearch = useCallback(() => {
+    console.log({currentUrlOptions})
     const newTerm = textInput;
     const oldTerm = currentUrlOptions ? currentUrlOptions.term : '';
     const searchType = radio === 1 ? 'search' : 'search_within';
     const term = searchType === 'search' ? newTerm : `${ newTerm } ${ oldTerm }`;
     const params = {
       from: 0,
-      size: currentUrlOptions ? currentUrlOptions.size : 10,
+      size: currentUrlOptions ? currentUrlOptions.size : 20,
       term,
     }
     dispatch(newSearch(params));
-  }, [dispatch, textInput, currentUrlOptions, radio]);
+  }, [dispatch, textInput, url, radio]);
   
   return (
     <form onSubmit={e => {

@@ -33,8 +33,6 @@ const Results = ({ language }) => {
   // to make API calls unnecessarily when the searchparams haven't changed on rerenders)
   const url = useSelector(store => store.router.location);
   const urlOptionsMap = parseURL(url);
-  const isSearchLandingPage = url === '/' || url === '';
-
   // Final. Kick off API calls based on new search params.
   // Note: We want to use the url string as the value to memoize based on.
   // Using the deconstructed object means unnecessary calls because the object
@@ -43,9 +41,7 @@ const Results = ({ language }) => {
   // to run after the DOM has been rewritten). We declare it here because we want certain variables to accessible
   // in its closure.
   useEffect(() => {
-    if(!isSearchLandingPage){
-      initiateAPICalls(dispatch)(urlOptionsMap);
-    }
+    initiateAPICalls(dispatch)(url);
     // Reset the keybaord focus to the top of the page on page changes.
     if(tabResetElement.current){
       tabResetElement.current.focus();

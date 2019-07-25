@@ -53,6 +53,12 @@ export const useBestBets = () => {
   return bestBets;
 }
 
+/**
+ * We return the url in addition to the newly constructed map so that
+ * any hooks that need to memoize the value can do so using the string since 
+ * functional components cannot maintain referential integrity for generated
+ * objects on rerenders.
+ */
 export const useUrlOptionsMap = () => {
   const url = useSelector(store => store.results.search);
   const urlOptionsMap = useMemo(() => {
@@ -63,5 +69,5 @@ export const useUrlOptionsMap = () => {
     // Add back in the original string for potential reference.
     return urlOptionsMap;
   }, [url]);
-  return urlOptionsMap;
+  return [url, urlOptionsMap];
 }

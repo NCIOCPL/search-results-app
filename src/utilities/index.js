@@ -43,29 +43,101 @@ export const removeLeadingSlash = url => {
  * Process, validate, and typecast variables correctly from
  * the raw object created by the querystring library.
  * 
+ * BIG NOTE:
+ * The results page url needs to be backwards compatible. The new search API
+ * uses different values. The API takes a term, a from, and a size paramater. The url
+ * needs to support pageunit, Offset, swKeyword, old_keywords, and page paramaters.
+ * 
+ * We need to do the conversion here so that the rest of the app is agnostic to the 
+ * legacy syntax. We'll also need to convert back to the old syntax everytime we update the
+ * page URL manually to execute a new search. Ideally in a deterministic order.
+ * 
+ * Since some values can be derived, we need to support various combinations of params.
+ * 
+ * Rules: 
+ * 1. swKeyword and old_keywords (if it exists) need to be combined as the term.
+ * 2. pageunit is equivalent to size, Offset is equivalent to from.
+ * 3. page can be derived from pageunit and Offset.
+ * 4. Offset can be derived from page and pageunit.
+ * 5. If one of the three variables does not exist, we derive the from and size from the other two.
+ * 6. If we cannot derive any value, we use a default.
+ * 
  * @param {Object} unformattedSearchParams
  * @return {Object} formatted search params
  */
 export const parseURL = url => {
+  const defaultsForUrlOptions = {
+    term: '',
+    from: 0,
+    size: 20,
+  };
+
   if(!url){
-    return {};
+    return defaultsForUrlOptions;
   }
-  const [term, searchParamsString] = removeLeadingSlash(url).split('?');
-  const decodedTerm = decodeURI(term);
-  const urlOptions = querystring.parse(searchParamsString, {
+
+  const legacyUrlOptions = querystring.parse(url, {
     parseNumbers: true,
     parseBooleans: true,
-  })
-  urlOptions.term = decodedTerm;
+  });
+  
+  const { 
+    swKeyword, 
+    old_keywords,
+    pageunit,
+    Offset,
+    page
+  } = legacyUrlOptions;
+
+  // 1. swKeyword and old_keywords (if it exists) need to be combined as the term.
+  const term = `${ swKeyword ? swKeyword : '' } ${ old_keywords ? old_keywords : '' }`.trim();
+
+  // 2 - 5:
+  let { from, size } = defaultsForUrlOptions;
+  // 2. pageunit is equivalent to size, Offset is equivalent to from, natch.
+  if(Number.isInteger(pageunit) && Number.isInteger(Offset)){
+    from = Offset;
+    size = pageunit;
+  }
+  // If one of the three variables does not exist, we derive the from and size from the other two.
+  else if(Number.isInteger(page) && Number.isInteger(Offset)){
+    from = Offset;
+    size = Offset / (page - 1);
+  }
+  else if(Number.isInteger(page) && Number.isInteger(pageunit)){
+    from = (page - 1) * pageunit;
+    size = pageunit;
+  }
+  // 6.
+  else {
+    // We don't have enough information to derive the intended params deterministically.
+    // We use the defaults set at the beginning.
+  }
+
+  const urlOptions = {
+    term,
+    from,
+    size,
+  }
+
   return urlOptions;
 };
 
+/**
+ * We want the URL to use the legacy syntax, so we need to convert the API
+ * values back to the old params. However, this URL will be immediately decoded again by
+ * the parseURL function prior to making any API calls and therefore does not need to use
+ * page or old_keywords.
+ */
 export const constructURL = urlOptionsMap => {
-  const { term, size = 10, from = 0 } = urlOptionsMap;
-  const params = { size, from };
-  const encodedTerm = encodeURI(term);
+  const { term, size, from } = urlOptionsMap;
+  const params = {
+    swKeyword: term,
+    pageunit: size,
+    Offset: from,
+  };
   const encodedParams = querystring.stringify(params);
-  const url = `${encodedTerm}?${encodedParams}`;
+  const url = `?${encodedParams}`;
   return url;
 }
 
