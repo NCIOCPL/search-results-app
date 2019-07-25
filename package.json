@@ -1,9 +1,11 @@
 {
   "name": "nci-search-results-app",
   "version": "0.1.0",
+  "main": "build/static/js/main.js",
   "private": true,
   "dependencies": {
     "@babel/core": "7.4.3",
+    "@babel/runtime": "^7.5.5",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
