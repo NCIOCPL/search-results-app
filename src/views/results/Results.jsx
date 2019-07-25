@@ -61,11 +61,11 @@ const Results = ({ language }) => {
     size,
   } = urlOptionsMap;
   // 3b. Calculate the numbers used for the results info displays.
-  const resultsStart = from + 1;
   const isFirstPage = from < size;
   // If we are on the last page of results, the range might be less than the offset
   // This breaks if we don't have a current search (total) yet so we delay the calculation by wrapping it in a function call or component...
   const getResultsEnd = (step, total) => step <= total ? step : total;
+  const getResultsStart = (from, total) => total === 0 ? 0 : from + 1;
   return(
     currentSearch
       ? (
@@ -74,9 +74,9 @@ const Results = ({ language }) => {
             <FeatureBox bestBetsIsVisible={ isFirstPage } />
             {/* Typically we would not make a p element tabbable. However, on page changes we want the tab focus to reset
             to this element so that the screen reader begins at the first non-redundant point. */}
-            <p ref={ tabResetElement } tabIndex="0" className="results__info-label">{ t('Results') } {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults } { t('for') }: { term }</p>
+            <p ref={ tabResetElement } tabIndex="0" className="results__info-label">{ t('Results') } {`${ getResultsStart(from, currentSearch.totalResults) }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults } { t('for') }: { term }</p>
             <ResultsList { ...currentSearch } />
-            <p className="results__info-label">{ t('Results') } {`${ resultsStart }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults }</p>
+            <p className="results__info-label">{ t('Results') } {`${ getResultsStart(from, currentSearch.totalResults) }-${ getResultsEnd(from + size, currentSearch.totalResults) }`} { t('of') } { currentSearch.totalResults }</p>
             <Pager 
               from={ from }
               size={ size }
