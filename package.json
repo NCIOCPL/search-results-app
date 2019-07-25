@@ -1,5 +1,5 @@
 {
-  "name": "search-results-app",
+  "name": "nci-search-results-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -67,6 +67,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "install": "npm run build",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
