@@ -6,12 +6,10 @@ import { formatPagerArray, keyHandler } from '../../utilities';
 import { useUrlOptionsMap } from '../../utilities/hooks';
 import './Pager.css';
 
-// TODO: Add keyhandler
-
 // We define these here to make it more obvious how the first
 // option is used to determine whether or not enough results were
 // returned to necessitate showing the navigation elements at all.
-const RESULT_SIZE_OPTIONS = [ 10, 20, 50 ];
+const RESULT_SIZE_OPTIONS = [ 20, 50 ];
 const LOWEST_STEP_SIZE = RESULT_SIZE_OPTIONS[0];
 
 const Pager = ({
