@@ -1,5 +1,5 @@
 import querystring from 'query-string';
-import { constructURL, parseURL } from '../../utilities';
+import { constructURL } from '../../utilities';
 // Action creator and controllers that are not directly associated with reducers. i.e., actions that target middleware
 // or complex sets of action creators.
 
@@ -16,8 +16,7 @@ export const newAPIResponse = (serviceName, cacheKey, body) => {
   }
 }
 
-export const initiateAPICalls = dispatch => url => {
-  const urlOptionsMap = parseURL(url);
+export const initiateAPICalls = dispatch => (url, urlOptionsMap) => {
   dispatch(initiateSiteWideSearchQuery(url, urlOptionsMap));
   dispatch(initiateDictionaryQuery(urlOptionsMap));
   // TODO: Don't call this except when the service has been specified in the initialization. (Only CGOV gets best bets)

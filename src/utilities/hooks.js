@@ -61,11 +61,12 @@ export const useBestBets = () => {
  */
 export const useUrlOptionsMap = () => {
   const url = useSelector(store => store.results.search);
+  const defaultSize = useSelector(store => store.globals.dropdownOptions)[0];
   const urlOptionsMap = useMemo(() => {
     if(!url){
       return {};
     }
-    const urlOptionsMap = parseURL(url);
+    const urlOptionsMap = parseURL(url, defaultSize);
     // Add back in the original string for potential reference.
     return urlOptionsMap;
   }, [url]);

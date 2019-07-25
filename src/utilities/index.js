@@ -65,11 +65,11 @@ export const removeLeadingSlash = url => {
  * @param {Object} unformattedSearchParams
  * @return {Object} formatted search params
  */
-export const parseURL = url => {
+export const parseURL = (url, defaultSize = 20) => {
   const defaultsForUrlOptions = {
     term: '',
     from: 0,
-    size: 20,
+    size: defaultSize,
   };
 
   if(!url){

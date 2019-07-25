@@ -32,7 +32,10 @@ const Results = ({ language }) => {
   // We do this outside of the hook so that the hook is reactive only to changes in the querystring (we don't want
   // to make API calls unnecessarily when the searchparams haven't changed on rerenders)
   const url = useSelector(store => store.router.location);
-  const urlOptionsMap = parseURL(url);
+  // Becase the dropdown options are passed as dynamic configuration settings, we need to pass them
+  // through so that any defaults used to construct a query are not hardcoded when they shouldn't be.
+  const defaultSize = useSelector(store => store.globals.dropdownOptions)[0];
+  const urlOptionsMap = parseURL(url, defaultSize);
   // Final. Kick off API calls based on new search params.
   // Note: We want to use the url string as the value to memoize based on.
   // Using the deconstructed object means unnecessary calls because the object
@@ -41,7 +44,7 @@ const Results = ({ language }) => {
   // to run after the DOM has been rewritten). We declare it here because we want certain variables to accessible
   // in its closure.
   useEffect(() => {
-    initiateAPICalls(dispatch)(url);
+    initiateAPICalls(dispatch)(url, urlOptionsMap);
     // Reset the keybaord focus to the top of the page on page changes.
     if(tabResetElement.current){
       tabResetElement.current.focus();

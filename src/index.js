@@ -30,7 +30,11 @@ const initialize = ({
   // on microsites, you simply don't pass a service in. The API middleware will only execute an API call if a service
   // was passed in here according to that specific service type (search|dictionary|bestBets).
   services = {},
+  // NOTE: To access translations, first take the language from the store and then
+  // use the translate utility function (which is composed with that map of translations).
+  // To add translations, edit the translations.config.js file.
   language = 'en',
+  dropdownOptions = [ 20, 50 ],
 } = {}) => {
   let cachedState;
   if(process.env.NODE_ENV !== 'development' && useSessionStorage === true) {
@@ -60,15 +64,12 @@ const initialize = ({
   // Here we are going to use the store as nothing more than a piece
   // of global configuration state to read from.
 
-  // To access translations, first take the language from the store and then
-  // use the translate utility function (which is composed with that map of translations).
-  // To add translations, edit the translations.config.js file.
   store.dispatch({
-    type: '@@globals/load_value',
+    type: '@@globals/load_values',
     payload: {
-      key: 'language',
-      value: language,
-    },
+      language,
+      dropdownOptions,
+    }
   })
 
   store.dispatch({

@@ -1,16 +1,10 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DropDown from './drop-down';
 import { newSearch } from '../../state/store/actions';
 import { formatPagerArray, keyHandler } from '../../utilities';
 import { useUrlOptionsMap } from '../../utilities/hooks';
 import './Pager.css';
-
-// We define these here to make it more obvious how the first
-// option is used to determine whether or not enough results were
-// returned to necessitate showing the navigation elements at all.
-const RESULT_SIZE_OPTIONS = [ 20, 50 ];
-const LOWEST_STEP_SIZE = RESULT_SIZE_OPTIONS[0];
 
 const Pager = ({
   from,
@@ -19,6 +13,10 @@ const Pager = ({
 }) => {
   const dispatch = useDispatch();
   const currentUrlOptions = useUrlOptionsMap();
+  const dropdownOptions = useSelector(store => store.globals.dropdownOptions);
+  // The lowest step size is used to determine whether we show any nav elements at all.
+  const lowestDropdownOption = dropdownOptions[0];
+
 
   const pagerNewSearch = useCallback((page) => {
     const params = {
@@ -39,7 +37,7 @@ const Pager = ({
     dispatch(newSearch(params));
   }, [dispatch, size, currentUrlOptions])
 
-  const shouldDisplayNav = totalResults > LOWEST_STEP_SIZE;
+  const shouldDisplayNav = totalResults > lowestDropdownOption;
   // When the results are so few that navigation will never be necessary don't show anything.
   if(!shouldDisplayNav){
     return null;
@@ -54,7 +52,7 @@ const Pager = ({
   const pages = formatPagerArray(totalPages, currentPage);
   return (
     <nav className="pager__container">
-      <DropDown newSearch={ dropdownNewSearch } options={ RESULT_SIZE_OPTIONS } size={ size } />
+      <DropDown newSearch={ dropdownNewSearch } options={ dropdownOptions } size={ size } />
       <div className='pager__nav'>
         {
           !isFirstPage &&
