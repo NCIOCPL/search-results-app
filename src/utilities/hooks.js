@@ -67,7 +67,6 @@ export const useUrlOptionsMap = () => {
       return {};
     }
     const urlOptionsMap = parseURL(url, defaultSize);
-    // Add back in the original string for potential reference.
     return urlOptionsMap;
   }, [url]);
   return [url, urlOptionsMap];

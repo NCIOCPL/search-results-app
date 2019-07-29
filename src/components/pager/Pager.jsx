@@ -12,12 +12,11 @@ const Pager = ({
   totalResults,
 }) => {
   const dispatch = useDispatch();
-  const currentUrlOptions = useUrlOptionsMap();
+  const [url, currentUrlOptions] = useUrlOptionsMap();
   const dropdownOptions = useSelector(store => store.globals.dropdownOptions);
   // The lowest step size is used to determine whether we show any nav elements at all.
   const lowestDropdownOption = dropdownOptions[0];
-
-
+  console.log(currentUrlOptions)
   const pagerNewSearch = useCallback((page) => {
     const params = {
       ...currentUrlOptions,
@@ -26,7 +25,10 @@ const Pager = ({
     };
 
     dispatch(newSearch(params));
-  }, [dispatch, currentUrlOptions, size]);
+    // Despite the linter warnings about the dependencies here. We want to watch the url string
+    // rather than the optionsmap in order to avoid unnecessary rerenders (as the object does not
+    // maintain referential integrity.)
+  }, [dispatch, url, size]);
 
   const dropdownNewSearch = useCallback((size) => {
     const params = {
