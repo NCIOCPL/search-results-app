@@ -1,11 +1,21 @@
-import React, { useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useCallback , useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useDictionary } from '../../../utilities/hooks';
 import { translate } from '../../../utilities/translation';
 
 const Dictionary = () => {
+  // Everytime the dictionary rerenders, we need to trigger the external code that injects the link
+  // audio player on audio elements.
+  useEffect(() => {
+    dispatch({
+      type: '@@event/dictionary_load',
+    })
+  })
+
+  const dispatch = useDispatch();
   const language = useSelector(store => store.globals.language);
   const t = translate(language);
+
   const [isToggleableTextVisible, setToggleVisibility] = useState(false);
   // Yes. I'm having fun. No, my wife is not a hat. Why do you ask? It's Tuesday. Everybody knows
   // she is a chinchilla on Tuesdays. She's only a hat on Thursdays. I never could get the hang of Thursdays.
@@ -13,10 +23,12 @@ const Dictionary = () => {
     e.preventDefault();
     setToggleVisibility(!isToggleableTextVisible);
   }, [isToggleableTextVisible])
+
   const dictionary = useDictionary();
   if(!dictionary){
     return null;
   }
+
   const {
     term,
     definition,
@@ -52,8 +64,7 @@ const Dictionary = () => {
               <a
                 onClick={ () => false }
                 className="CDR_audiofile"
-                data-nci-link-audio-file=""
-                data-pathname={ pronunciation.audio }
+                href={ pronunciation.audio }
               >
                 <span className="hidden">listen</span>
               </a>
