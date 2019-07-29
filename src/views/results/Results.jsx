@@ -4,7 +4,6 @@ import {
   Spinner,
   Pager,
   ResultsList,
-  SearchBox,
   FeatureBox,
 } from '../../components';
 import { initiateAPICalls } from '../../state/store/actions';
@@ -83,7 +82,6 @@ const Results = ({ language }) => {
               totalResults={ currentSearch.totalResults }
             />
             <p className="results__info-label">{ currentSearch.totalResults } { t('results found for') }: { term }</p>
-            <SearchBox />
           </>
         )
       : <Spinner />
