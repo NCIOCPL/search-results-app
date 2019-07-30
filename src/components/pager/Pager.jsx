@@ -16,7 +16,6 @@ const Pager = ({
   const dropdownOptions = useSelector(store => store.globals.dropdownOptions);
   // The lowest step size is used to determine whether we show any nav elements at all.
   const lowestDropdownOption = dropdownOptions[0];
-  console.log(currentUrlOptions)
   const pagerNewSearch = useCallback((page) => {
     const params = {
       ...currentUrlOptions,
