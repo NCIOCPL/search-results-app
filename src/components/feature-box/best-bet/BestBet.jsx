@@ -12,7 +12,7 @@ const BestBet = ({ name, results = [] }) => {
               <ul>
                 {
                   results.map((listItem, index) => (
-                    <BestBetListItem key={ index } { ...listItem } />
+                    <BestBetListItem key={ index } resultIndex={ index } { ...listItem } />
                   ))
                 }
               </ul>

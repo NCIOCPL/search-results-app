@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useMemo, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { parseURL } from './index';
 /**
  * Whenever a UI component needs access to the current search
@@ -70,4 +70,35 @@ export const useUrlOptionsMap = () => {
     return urlOptionsMap;
   }, [url]);
   return [url, urlOptionsMap];
+}
+
+/**
+ * Emit an event to trigger our external analytics libraries when a result click is selected.
+ * Include any arguments needed for the analytics call as the payload.
+ * 
+ * @param {number} resultIndex The ordinal index (1-indexed) of the result in its list container
+ * @param {boolean} [isBestBet=false] True if the list container is a best bet feature box.
+ * @returns {function} onClick handler to emit results click events.
+ */
+export const useResultClickEventEmitter = (resultIndex, isBestBet = false) => {
+  const dispatch = useDispatch();
+  const onClickHandler = useCallback(() => {
+    dispatch({
+      type: '@@event/result_click',
+      // The arguments here will eventually be destructured into the NCI analytics function 
+      // 'SiteWideSearchResults' (which in turn calls ClickParams).
+      payload: [
+        // The click params analytics handler requires a reference
+        // to the element originating the click event. However, it never uses it.
+        // To save ourselves having to also generate a React ref for each link,
+        // we'll just pass null.
+        null,
+        // Link is not in a best bet feature box.
+        isBestBet, 
+        // The analytics library expect 1-indexed indexes.
+        resultIndex + 1,
+      ],
+    });
+  }, [resultIndex]);
+  return onClickHandler;
 }

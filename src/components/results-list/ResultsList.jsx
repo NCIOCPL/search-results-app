@@ -6,7 +6,7 @@ const ResultsList = ({ results }) => {
   return (
     <ul className="no-bullets results-list__container">
       {
-        results.map((result, index) =>  <ResultsListItem key={ index } { ...result } />)
+        results.map((result, index) =>  <ResultsListItem key={ index } resultIndex={ index } { ...result } />)
       }
     </ul>
   )
