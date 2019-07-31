@@ -26,7 +26,7 @@ export const reducer = (state = initialState, action) => {
             // caching the API result. This will save us several bytes of memory as well!!!
             // Unfortunately, the suffix is language dependent so we need to sanitize the string for
             // both options.
-            const test = /\- National Cancer Institute|\- Instituto Nacional del Cáncer$/i
+            const test = /- National Cancer Institute|- Instituto Nacional del Cáncer$/i
             const sanitizedTitle = title.replace(test, '').trim();
             curr.title = sanitizedTitle;
 
