@@ -66,7 +66,7 @@ const Results = ({ language }) => {
   const getResultsEnd = (step, total) => step <= total ? step : total;
   const getResultsStart = (from, total) => total === 0 ? 0 : from + 1;
   return(
-    currentSearch
+    currentSearch != null
       ? (
           <>
             <p className="results__info-label">{ t('Results for') }: { term }</p>

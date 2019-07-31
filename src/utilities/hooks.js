@@ -8,7 +8,7 @@ import { parseURL } from './index';
 export const useCurrentSearchResults = () => {
   const cache = useSelector(store => store.cache);
   const cacheKey = useSelector(store => store.results.search);
-  if(!cacheKey){
+  if(cacheKey == null){
     return null;
   }
   const normalizedSearch = cache.search[cacheKey];
