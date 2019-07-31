@@ -142,7 +142,7 @@
 }
 
 
-.results dd.info-summary,.results dd.pronunciation,.results dt {
+/* .results dd.info-summary,.results dd.pronunciation,.results dt {
   display: inline;
 }
 
@@ -178,4 +178,4 @@
 
 .dictionary-list dfn a {
   font-weight: 400
-}
+} */

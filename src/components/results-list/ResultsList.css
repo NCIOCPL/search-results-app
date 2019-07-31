@@ -3,3 +3,7 @@
   margin-bottom: 1.875em
 }
 
+.results-list__container .url {
+  font-size: .875em;
+  word-break: break-all;
+}

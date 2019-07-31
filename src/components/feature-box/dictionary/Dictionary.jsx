@@ -85,7 +85,7 @@ const Dictionary = () => {
         // TODO: Need to firm up reqs for when this should show rather than
         // only on multiple sentences.
         hasMultipleSentences &&
-          <div className="feature-box__definition-toggle">
+          <div className={`feature-box__definition-toggle sprite-hook__chevron-black ${ isToggleableTextVisible ? 'sprite-hook__chevron-black--up' : '' }`}>
             {/* TODO: This text is conditional */}
             <a onClick={ toggleToggle }>{ isToggleableTextVisible ? t('Hide full definition') : t('Show full definition') }</a>
           </div>
