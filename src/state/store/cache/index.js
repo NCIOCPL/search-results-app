@@ -19,7 +19,18 @@ export const reducer = (state = initialState, action) => {
           // matching item in the resultItems map.
           // It's easier to process the resultItems in advance.
           const newResultItems = body.results.reduce((acc, curr) => {
-            const { url } = curr;
+            const { url, title } = curr;
+
+            // Result Items come back with a NCI suffix which we don't want to display to the user.
+            // Because we aren't using it for any other purposes, we'll remove it altogether before
+            // caching the API result. This will save us several bytes of memory as well!!!
+            // Unfortunately, the suffix is language dependent so we need to sanitize the string for
+            // both options.
+            const test = /\- National Cancer Institute|\- Instituto Nacional del Cáncer$/i
+            const sanitizedTitle = title.replace(test, '').trim();
+            curr.title = sanitizedTitle;
+
+            // Creating a key/value with the key as the result url for the search cache to reference.
             acc[url] = curr;
             return acc;
           }, {});
