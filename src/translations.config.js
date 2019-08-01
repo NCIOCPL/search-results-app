@@ -19,4 +19,5 @@ export default {
   'Show': 'Mostrar',
   'results per page': 'resultados por página',
   'results found for': 'resultados de búsqueda para',
+  'Infographic': 'Infografía',
 };
