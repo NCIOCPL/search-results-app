@@ -21,7 +21,8 @@ import './index.css';
 const initialize = ({
   appId = '@@/DEFAULT_SWS_APP_ID',
   useSessionStorage = true,
-  rootId = 'NCI-search-results-root',
+  rootId = 'NCI-app-root',
+  // This should be the analytics handler.
   eventHandler,
   // By passing in the API services as both configuration objects and a url generator (controller) we
   // can move most of the custom processing into the bridge code for easier adjustment per site based on
@@ -105,6 +106,7 @@ const initialize = ({
     store.subscribe(saveDesiredStateToSessionStorage);
   }
 
+  const appRootDOMNode = document.getElementById(rootId);
 
   const App = () => {
     return (
@@ -118,46 +120,23 @@ const initialize = ({
     );
   };
 
-  ReactDOM.render(<App />, document.getElementById(rootId));
+  ReactDOM.render(<App />, appRootDOMNode);
+  return appRootDOMNode;
 };
 
-// The following lets us run the app in dev not in situ as would normally be the case.
-if (process.env.NODE_ENV !== 'production') {
-  try{
-    import('./__nci-dev__common.css');
-  }
-  catch(err){
-    console.log("Can't find common.css file")
-  }
-  const rootId = 'NCI-search-results-root';
-  const eventHandler = () => {};
-  const search = urlOptionsMap => {
-    const baseEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/Search/cgov/en/';
-    const endpoint = baseEndpoint + urlOptionsMap.queryString;
-    return endpoint;
-  }
-  const dictionary = urlOptionsMap => {
-    const baseEndpoint = 'https://www.cancer.gov/Dictionary.Service/v1/search?dictionary=term&language=English&searchType=exact&offset=0&maxResuts=0';
-    const searchText = encodeURI(urlOptionsMap.term);
-    const endpoint = `${ baseEndpoint }&searchText=${ searchText }`;
-    return endpoint;
-  }
-  const bestBets = urlOptionsMap => {
-    const baseEndpoint = 'https://webapis.cancer.gov/bestbets/v1/BestBets/live/en/';
-    const searchText = encodeURI(urlOptionsMap.term);
-    const endpoint = baseEndpoint + searchText;
-    return endpoint;
-  }
-  initialize({
-    rootId,
-    eventHandler,
-    services: {
-      search,
-      dictionary,
-      bestBets,
-    },
-    language: 'en',
-  });
-}
-
 export default initialize;
+
+// The following lets us run the app in dev not in situ as would normally be the case.
+const appParams = window.APP_PARAMS || {};
+const integrationTestOverrides = window.INT_TEST_APP_PARAMS || {};
+
+if (process.env.NODE_ENV !== 'production') {
+
+  // This is DEV.
+  const settings = {
+    ...appParams,
+    ...integrationTestOverrides
+  };
+
+  initialize(settings);
+}
