@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "totalResults": 30,
+    "from": 0
+  },
+  "results": [{
+    "termId": 46634,
+    "language": "en",
+    "dictionary": "Cancer.gov",
+    "audience": "Patient",
+    "termName": "tumor",
+    "firstLetter": "t",
+    "prettyUrlName": "tumor",
+    "pronunciation": {
+      "key": "(TOO-mer)",
+      "audio": "https://nci-media.cancer.gov/pdq/media/audio/709838.mp3"
+    },
+    "definition": {
+      "html": "An abnormal\n          mass of tissue that results when cells divide more than\n          they should or do not die when they should.\n          Tumors may be benign (not\n          cancer), or malignant (cancer). Also called neoplasm.",
+      "text": "An abnormal\n          mass of tissue that results when cells divide more than\n          they should or do not die when they should.\n          Tumors may be benign (not\n          cancer), or malignant (cancer). Also called neoplasm."
+    },
+    "otherLanguages": [],
+    "relatedResources": [],
+    "media": []
+  }],
+  "links": null
+}

@@ -89,7 +89,15 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "npm run unit-tests && npm run cy:ci",
+    "posttest": "npm run report:combined",
+    "test:it": "cypress open",
+    "cy:ci": "start-server-and-test start http://localhost:3000 integration-tests",
+    "unit-tests": "jest",
+    "integration-tests": "cypress run",
+    "prereport:combined": "cp coverage/cypress/coverage-final.json coverage/from-cypress.json && cp coverage/jest/coverage-final.json coverage/from-jest.json",
+    "report:combined": "nyc merge coverage && mv coverage.json .nyc_output/out.json",
+    "postreport:combined": "nyc report --reporter lcov --report-dir coverage"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -107,17 +115,33 @@
     ]
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
+    "roots": [
+      "<rootDir>/src"
     ],
+    "collectCoverage": true,
+    "coverageDirectory": "coverage/jest",
+    "collectCoverageFrom": [
+      "src/**/*.test.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts",
+      "!cypress/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 30,
+        "functions": 30,
+        "lines": 30,
+        "statements": -10
+      }
+    },
     "setupFiles": [
       "react-app-polyfill/jsdom"
     ],
-    "setupFilesAfterEnv": [],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+      "<rootDir>/src/**/*.test.{js,jsx,ts,tsx}"
     ],
     "testEnvironment": "jest-environment-jsdom-fourteen",
     "transform": {
@@ -154,6 +178,20 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      "istanbul"
     ]
-  }
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
+  },
+  "nyc": {
+    "report-dir": "coverage/cypress",
+    "reporter": [
+      "text",
+      "json"
+    ]
+  },
+  "devDependencies": {}
 }

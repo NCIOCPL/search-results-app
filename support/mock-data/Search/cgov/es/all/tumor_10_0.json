@@ -1,0 +1,54 @@
+{
+  "results": [{
+    "title": "Tumores de la región pineal - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/rare-brain-spine-tumor/espanol/tumores/tumores-region-pineal",
+    "contentType": "cgvArticle",
+    "description": "Infórmese sobre los grados, las características, las causas y los síntomas de los tumores de la región pineal, a quiénes afectan estos tumores, cómo y dónde se forman, y los tratamientos."
+  }, {
+    "title": "Tumores de plexo coroideo - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/rare-brain-spine-tumor/espanol/tumores/tumores-plexo-coroideo",
+    "contentType": "cgvArticle",
+    "description": "Infórmese sobre los grados, las características, las causas y los síntomas de los tumores de plexo coroideo, a quiénes afectan estos tumores, cómo y dónde se forman, y los tratamientos."
+  }, {
+    "title": "Información sobre tumores infrecuentes de cerebro y médula espinal - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/rare-brain-spine-tumor/espanol/tumores/tumores-sobre-snc",
+    "contentType": "cgvArticle",
+    "description": "Obtenga información sobre los médicos que tratan los tumores infrecuentes de cerebro y médula espinal, la forma en que se determina el diagnóstico y el grado de los tumores e infórmese sobre las características genéticas de los tumores del sistema nervioso central (SNC)."
+  }, {
+    "title": "Tumores infrecuentes de cerebro y médula espinal - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/rare-brain-spine-tumor/espanol/tumores",
+    "contentType": "cgvMiniLanding",
+    "description": "Información de NCI-CONNECT sobre grados, características, causas y síntomas de los tumores infrecuentes del SNC en adultos, personas a quiénes afectan, modo y lugar donde se forman y tratamientos."
+  }, {
+    "title": "Tumores neuroectodérmicos primitivos - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/rare-brain-spine-tumor/espanol/tumores/tnep",
+    "contentType": "cgvArticle",
+    "description": "Infórmese sobre los grados, las características, las causas y los síntomas de los tumores neuroectodérmicos primitivos, a quien afecta estos tumores, cómo y dónde se forman, y los tratamientos."
+  }, {
+    "title": "Tumor teratoide rabdoide atípico - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/rare-brain-spine-tumor/espanol/tumores/ttra",
+    "contentType": "cgvArticle",
+    "description": "Infórmese sobre los grados, las características, las causas y los síntomas del tumor teratoide rabdoide atípico (TTRA), a quiénes afectan estos tumores, cómo y dónde se forman, y los tratamientos."
+  }, {
+    "title": "Tratamiento de los tumores vasculares infantiles (PDQ®)–Versión para pacientes - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/espanol/tipos/sarcoma-de-tejido-blando/paciente/tratamiento-tumores-vasculares-infantiles-pdq",
+    "contentType": "pdqCancerInfoSummary",
+    "description": "Resumen de información revisada por expertos acerca del tratamiento de los tumores vasculares infantiles."
+  }, {
+    "title": "Anatomía y funciones de los tumores de cerebro y médula espinal - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/rare-brain-spine-tumor/espanol/tumores/anatomia",
+    "contentType": "cgvArticle",
+    "description": "Infórmese sobre la localización de su tumor de cerebro o médula espinal para entender los síntomas y cambios que se pueden producir."
+  }, {
+    "title": "Tumores carcinoides gastrointestinales—Versión para pacientes - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/espanol/tipos/tumores-carcinoides-gi",
+    "contentType": "cgvCancerTypeHome",
+    "description": "Los tumores carcinoides gastrointestinales son tumores de crecimiento lento que se forman en las células neuroendocrinas del tubo gastrointestinal. El tubo gastrointestinal incluye el estómago, el recto, el intestino delgado, el colon, el apéndice y otros órganos. Comience aquí para encontrar más información."
+  }, {
+    "title": "Tumores carcinoides gastrointestinales—Versión para profesionales de salud - Instituto Nacional del Cáncer",
+    "url": "https://www.cancer.gov/espanol/tipos/tumores-carcinoides-gi/pro",
+    "contentType": "cgvCancerTypeHome",
+    "description": "Los tumores carcinoides gastrointestinales son tumores poco comunes, de crecimiento lento que se forman en las células neuroendocrinas del tubo gastrointestinal. Encuentre información basada en datos probatorios sobre el tratamiento y la investigación relacionados con los tumores carcinoides gastrointestinales."
+  }],
+  "totalResults": 766
+}
