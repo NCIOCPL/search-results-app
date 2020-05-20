@@ -61,32 +61,14 @@
         {
           // English WWW
           appId: '@@/ENGLISH_SWS',
-          //eventHandler,
-          // By passing in the API services as both configuration objects and a url generator (controller) we
-          // can move most of the custom processing into the bridge code for easier adjustment per site based on
-          // changing requirements.
-          // In addition, if you don't want a specific instance of the app to use a service, such as dictionary or bestbets
-          // on microsites, you simply don't pass a service in. The API middleware will only execute an API call if a service
-          // was passed in here according to that specific service type (search|dictionary|bestBets).
-          services: {
-            search: urlOptionsMap => {
-              const baseEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/Search/cgov/en/';
-              const endpoint = baseEndpoint + urlOptionsMap.queryString;
-              return endpoint;
-            },
-            dictionary: urlOptionsMap => {
-              const baseEndpoint = 'https://www.cancer.gov/Dictionary.Service/v1/search?dictionary=term&language=English&searchType=exact&offset=0&maxResuts=0';
-              const searchText = encodeURI(urlOptionsMap.term);
-              const endpoint = `${ baseEndpoint }&searchText=${ searchText }`;
-              return endpoint;
-            },
-            bestBets: urlOptionsMap => {
-              const baseEndpoint = 'https://webapis.cancer.gov/bestbets/v1/BestBets/live/en/';
-              const searchText = encodeURI(urlOptionsMap.term);
-              const endpoint = baseEndpoint + searchText;
-              return endpoint;
-            }            
-          },
+          searchEndpoint: 'https://webapis.cancer.gov/sitewidesearch/v1/',
+          searchCollection: 'cgov',
+          searchSiteFilter: 'all',
+          bestbetsEndpoint: 'https://webapis.cancer.gov/bestbets/v1/',
+          bestbetsCollection: 'live',
+          dictionaryEndpoint: 'https://webapis.cancer.gov/glossary/v1/',
+          dictionaryName: 'Cancer.gov',
+          dictionaryAudience: 'Patient',
           // NOTE: To access translations, first take the language from the store and then
           // use the translate utility function (which is composed with that map of translations).
           // To add translations, edit the translations.config.js file.
@@ -96,32 +78,14 @@
         {
           // Spanish WWW
           appId: '@@/SPANISH_SWS',
-          //eventHandler,
-          // By passing in the API services as both configuration objects and a url generator (controller) we
-          // can move most of the custom processing into the bridge code for easier adjustment per site based on
-          // changing requirements.
-          // In addition, if you don't want a specific instance of the app to use a service, such as dictionary or bestbets
-          // on microsites, you simply don't pass a service in. The API middleware will only execute an API call if a service
-          // was passed in here according to that specific service type (search|dictionary|bestBets).
-          services: {
-            search: urlOptionsMap => {
-              const baseEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/Search/cgov/es/';
-              const endpoint = baseEndpoint + urlOptionsMap.queryString;
-              return endpoint;
-            },
-            dictionary: urlOptionsMap => {
-              const baseEndpoint = 'https://www.cancer.gov/Dictionary.Service/v1/search?dictionary=term&language=Spanish&searchType=exact&offset=0&maxResuts=0';
-              const searchText = encodeURI(urlOptionsMap.term);
-              const endpoint = `${ baseEndpoint }&searchText=${ searchText }`;
-              return endpoint;
-            },
-            bestBets: urlOptionsMap => {
-              const baseEndpoint = 'https://webapis.cancer.gov/bestbets/v1/BestBets/live/es/';
-              const searchText = encodeURI(urlOptionsMap.term);
-              const endpoint = baseEndpoint + searchText;
-              return endpoint;
-            }            
-          },
+          searchEndpoint: 'https://webapis.cancer.gov/sitewidesearch/v1/',
+          searchCollection: 'cgov',
+          searchSiteFilter: 'all',
+          bestbetsEndpoint: 'https://webapis.cancer.gov/bestbets/v1/',
+          bestbetsCollection: 'live',
+          dictionaryEndpoint: 'https://webapis.cancer.gov/glossary/v1/',
+          dictionaryName: 'Cancer.gov',
+          dictionaryAudience: 'Patient',
           // NOTE: To access translations, first take the language from the store and then
           // use the translate utility function (which is composed with that map of translations).
           // To add translations, edit the translations.config.js file.
@@ -130,21 +94,12 @@
         },
         {
           // English DOC
-          appId: '@@/SPANISH_SWS',
-          //eventHandler,
-          // By passing in the API services as both configuration objects and a url generator (controller) we
-          // can move most of the custom processing into the bridge code for easier adjustment per site based on
-          // changing requirements.
-          // In addition, if you don't want a specific instance of the app to use a service, such as dictionary or bestbets
-          // on microsites, you simply don't pass a service in. The API middleware will only execute an API call if a service
-          // was passed in here according to that specific service type (search|dictionary|bestBets).
-          services: {
-            search: urlOptionsMap => {
-              const baseEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/Search/cgov/es/';
-              const endpoint = baseEndpoint + urlOptionsMap.queryString;
-              return endpoint;
-            }           
-          },
+          appId: '@@/EN_DOC_SWS',
+          searchEndpoint: 'https://webapis.cancer.gov/sitewidesearch/v1/',
+          searchCollection: 'doc',
+          searchSiteFilter: 'all',
+          bestbetsEndpoint: false,
+          dictionaryEndpoint: false,
           // NOTE: To access translations, first take the language from the store and then
           // use the translate utility function (which is composed with that map of translations).
           // To add translations, edit the translations.config.js file.

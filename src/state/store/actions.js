@@ -107,8 +107,8 @@ export const initiateDictionaryQuery = urlOptionsMap => {
       formatResponse: body => {
         // We can inspect the metaProperty.result_count value to determine if
         // we are safe to extract the term details.
-        const hasResult = body.meta.result_count > 0;
-        return hasResult ? body.result[0].term : null;
+        const hasResult = body.meta.totalResults > 0;
+        return hasResult ? body.results[0] : null;
       },
     },
   };

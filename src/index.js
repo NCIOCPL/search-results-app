@@ -18,25 +18,65 @@ import Results from './views/results';
 import { loadStateFromSessionStorage, saveStatetoSessionStorage } from './utilities';
 import './index.css';
 
+/**
+ * Initialize the Sitewide Search App
+ *
+ * @param {object} params The configuration options
+ * @param {string} params.appId The application ID
+ * @param {boolean} params.useSessionStorage Use session storage for caching. (Default: true)
+ * @param {string} params.rootId The app root element ID to insert the app at. (Default: 'NCI-app-root')
+ * @param {string} params.searchEndpoint The sitewide search API endpoint. (Default: 'https://webapis.cancer.gov/sitewidesearch/v1/')
+ * @param {string} params.bestbetsEndpoint The bestbests API endpoint. Set false to remove best bets from results. (Default: 'https://webapis.cancer.gov/bestbets/v1/')
+ * @param {string} params.dictionaryEndpoint The dictionary API endpoint. Set false to remove definition from results. (Default: 'https://webapis.cancer.gov/glossary/v1/')
+ * @param {string} params.language The language of the app. (Default: 'en')
+ * @param {array} params.dropdownOptions The choice for the number of results to show. (Default: [20, 50])
+ */
 const initialize = ({
   appId = '@@/DEFAULT_SWS_APP_ID',
   useSessionStorage = true,
   rootId = 'NCI-app-root',
   // This should be the analytics handler.
   eventHandler,
-  // By passing in the API services as both configuration objects and a url generator (controller) we
-  // can move most of the custom processing into the bridge code for easier adjustment per site based on
-  // changing requirements.
-  // In addition, if you don't want a specific instance of the app to use a service, such as dictionary or bestbets
-  // on microsites, you simply don't pass a service in. The API middleware will only execute an API call if a service
-  // was passed in here according to that specific service type (search|dictionary|bestBets).
-  services = {},
+  searchEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/',
+  searchCollection = 'cgov',
+  searchSiteFilter = 'all',
+  bestbetsEndpoint = 'https://webapis.cancer.gov/bestbets/v1/',
+  bestbetsCollection = 'live',
+  dictionaryEndpoint = 'https://webapis.cancer.gov/glossary/v1/',
+  dictionaryName = 'Cancer.gov',
+  dictionaryAudience = 'Patient',
+
   // NOTE: To access translations, first take the language from the store and then
   // use the translate utility function (which is composed with that map of translations).
   // To add translations, edit the translations.config.js file.
   language = 'en',
   dropdownOptions = [ 20, 50 ],
 } = {}) => {
+
+  // Making this backwards compatible with the code for now. We should not be passing in
+  // functions that transform the request urls, since the app expects the response to
+  // match that specific version of the API. We should move to react-fetching and just
+  // define the endpoints there.
+  const services = {
+    search: ({
+      term = "",
+      size = 0,
+      from = 0
+    }={}) => {
+      return `${searchEndpoint}Search/${searchCollection}/${language}/${encodeURI(term)}?from=${from}&size=${size}&site=${searchSiteFilter}`;
+    },
+    dictionary: dictionaryEndpoint ? ({
+      term = ""
+    }={}) => {
+      return `${dictionaryEndpoint}Terms/search/${dictionaryName}/${dictionaryAudience}/${language}/${encodeURI(term)}?size=1`;
+    } : undefined,
+    bestBets: bestbetsEndpoint ? ({
+      term = ""
+    }={}) => {
+      return `${bestbetsEndpoint}BestBets/${bestbetsCollection}/${language}/${encodeURI(term)}`;
+    } : undefined
+  };
+
   let cachedState;
   if(process.env.NODE_ENV !== 'development' && useSessionStorage === true) {
       cachedState = loadStateFromSessionStorage(appId);
