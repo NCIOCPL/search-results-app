@@ -38,6 +38,7 @@ const initialize = ({
   rootId = 'NCI-app-root',
   // This should be the analytics handler.
   eventHandler,
+  title = 'NCI Search Results',
   searchEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/',
   searchCollection = 'cgov',
   searchSiteFilter = 'all',
@@ -154,7 +155,7 @@ const initialize = ({
       <Provider store={ store }>
         <ErrorBoundary dispatch={ store.dispatch }>
           <NavigationHandler>
-            <Results language={ language } />
+            <Results title={ title } language={ language } />
           </NavigationHandler>
         </ErrorBoundary>
       </Provider>

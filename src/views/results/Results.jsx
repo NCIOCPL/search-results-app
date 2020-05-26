@@ -12,7 +12,7 @@ import { translate } from '../../utilities/translation';
 import { useCurrentSearchResults } from '../../utilities/hooks';
 import './Results.css';
 
-const Results = ({ language }) => {
+const Results = ({ title, language }) => {
   const dispatch = useDispatch();
   // The view will be rendered entirely by state derived from the URL. Both immediately and
   // asynchronously as a result of API calls initiated by the URL search params. To that end
@@ -69,6 +69,7 @@ const Results = ({ language }) => {
     currentSearch != null
       ? (
           <>
+            <h1><span>{title}</span></h1>
             <p className="results__info-label">{ t('Results for') }: { term }</p>
             <FeatureBox bestBetsIsVisible={ isFirstPage } />
             {/* Typically we would not make a p element tabbable. However, on page changes we want the tab focus to reset
