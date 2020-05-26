@@ -8,25 +8,15 @@ beforeEach(() => {
     // page. Setting all defaults in order to make sure that a change
     // to development defaults does not break a bunch of texts.
     win.INT_TEST_APP_PARAMS = {
-      services: {
-        search: urlOptionsMap => {
-          const baseEndpoint = '/api/sitewidesearch/v1/Search/cgov/en/';
-          const endpoint = baseEndpoint + urlOptionsMap.queryString;
-          return endpoint;
-        },
-        dictionary: urlOptionsMap => {
-          const baseEndpoint = '/api/Dictionary.Service/v1/search?dictionary=term&language=English&searchType=exact&offset=0&maxResuts=0';
-          const searchText = encodeURI(urlOptionsMap.term);
-          const endpoint = `${ baseEndpoint }&searchText=${ searchText }`;
-          return endpoint;
-        },
-        bestBets: urlOptionsMap => {
-          const baseEndpoint = '/api/bestbets/v1/BestBets/live/en/';
-          const searchText = encodeURI(urlOptionsMap.term);
-          const endpoint = baseEndpoint + searchText;
-          return endpoint;
-        }
-      },
+      title: 'NCI Search Results',
+      searchEndpoint: 'https://webapis.cancer.gov/sitewidesearch/v1/',
+      searchCollection: 'cgov',
+      searchSiteFilter: 'all',
+      bestbetsEndpoint: 'https://webapis.cancer.gov/bestbets/v1/',
+      bestbetsCollection: 'live',
+      dictionaryEndpoint: 'https://webapis.cancer.gov/glossary/v1/',
+      dictionaryName: 'Cancer.gov',
+      dictionaryAudience: 'Patient',
       language: 'en',
       dropdownOptions: [ 20, 50 ],
     };
