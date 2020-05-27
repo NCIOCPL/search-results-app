@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useResultClickEventEmitter } from '../../../utilities/hooks';
+import { useTracking } from 'react-tracking';
 import { translate } from '../../../utilities/translation';
 
 const ResultsListItem = ({
@@ -10,7 +10,21 @@ const ResultsListItem = ({
   resultIndex,
   contentType,
 }) => {
-  const resultClickEventEmitter = useResultClickEventEmitter(resultIndex);
+
+  // Analytics for search result click
+  const tracking = useTracking();
+  const clickHandler = () => {
+    tracking.trackEvent({
+      type: 'Other',
+      event: 'SearchResultsApp:Other:ResultClick',
+      linkName: 'SiteWideSearchResults',
+      resultTitle: title,
+      resultUrl: url,
+      resultIndex,
+      resultSource: 'generic'
+    });
+  };
+
   const language = useSelector(store => store.globals.language);
   const t = translate(language);
   const contentTypeDisplay =
@@ -21,7 +35,7 @@ const ResultsListItem = ({
         : '';
   return (
     <li>
-      <a href={url} onClick={resultClickEventEmitter}>
+      <a href={url} onClick={clickHandler}>
         {title}
       </a>
       {contentTypeDisplay && (

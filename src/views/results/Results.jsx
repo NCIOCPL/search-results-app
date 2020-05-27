@@ -1,5 +1,6 @@
 import React, { useEffect, useRef  } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
+import { useTracking } from 'react-tracking';
 import {
   Spinner,
   Pager,
@@ -13,6 +14,7 @@ import { useCurrentSearchResults } from '../../utilities/hooks';
 import './Results.css';
 
 const Results = ({ title, language }) => {
+  const tracking = useTracking();
   const dispatch = useDispatch();
   // The view will be rendered entirely by state derived from the URL. Both immediately and
   // asynchronously as a result of API calls initiated by the URL search params. To that end
@@ -65,6 +67,28 @@ const Results = ({ title, language }) => {
   // This breaks if we don't have a current search (total) yet so we delay the calculation by wrapping it in a function call or component...
   const getResultsEnd = (step, total) => step <= total ? step : total;
   const getResultsStart = (from, total) => total === 0 ? 0 : from + 1;
+
+  // Adding the Page Load here. This should fire for any query changes
+  // or pagination.
+  useEffect(() => {
+    if (currentSearch != null) {
+      console.log("tracking...");
+      console.log(currentSearch);
+      tracking.trackEvent({
+        type: 'PageLoad',
+        event: "SearchResultsApp:Load:Results",
+        name: 'PAGE_NAME_HERE',
+        title: 'TITLE_HERE',
+        metaTitle: 'METATITLE',
+        searchKeyword: term,
+        currentPage: '',
+        size,
+        totalResults: currentSearch.totalResults
+      });
+    }
+  }, [currentSearch]);
+
+
   return(
     currentSearch != null
       ? (

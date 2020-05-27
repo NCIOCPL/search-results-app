@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as reducers from './state/store/reducers';
-import createEventReporterMiddleware from './state/middleware/event-reporter';
 import createApiMiddleware from './state/middleware/api';
 import metadataMiddleWare from './state/middleware/metadata';
 import cacheMiddleware from './state/middleware/cache';
@@ -14,6 +13,7 @@ import { createBrowserHistory } from 'history';
 import createHistoryMiddleware from './state/middleware/history';
 import NavigationHandler from './components/navigation-handler';
 import ErrorBoundary from './components/error-boundary';
+import { AnalyticsProvider, EddlAnalyticsProvider } from './tracking';
 import Results from './views/results';
 import { loadStateFromSessionStorage, saveStatetoSessionStorage } from './utilities';
 import * as serviceWorker from "./serviceWorker";
@@ -26,6 +26,7 @@ import './index.css';
  * @param {string} params.appId The application ID
  * @param {boolean} params.useSessionStorage Use session storage for caching. (Default: true)
  * @param {string} params.rootId The app root element ID to insert the app at. (Default: 'NCI-app-root')
+ * @param {string|Function} params.analyticsHandler A function for analytics handling, or the string EddlAnalyticsHandler to use the EddlAnalyticsProvider. (Default: 'EddlAnalyticsProvider')
  * @param {string} params.searchEndpoint The sitewide search API endpoint. (Default: 'https://webapis.cancer.gov/sitewidesearch/v1/')
  * @param {string} params.bestbetsEndpoint The bestbests API endpoint. Set false to remove best bets from results. (Default: 'https://webapis.cancer.gov/bestbets/v1/')
  * @param {string} params.dictionaryEndpoint The dictionary API endpoint. Set false to remove definition from results. (Default: 'https://webapis.cancer.gov/glossary/v1/')
@@ -36,8 +37,7 @@ const initialize = ({
   appId = '@@/DEFAULT_SWS_APP_ID',
   useSessionStorage = true,
   rootId = 'NCI-app-root',
-  // This should be the analytics handler.
-  eventHandler,
+  analyticsHandler = "EddlAnalyticsHandler",
   title = 'NCI Search Results',
   searchEndpoint = 'https://webapis.cancer.gov/sitewidesearch/v1/',
   searchCollection = 'cgov',
@@ -87,7 +87,6 @@ const initialize = ({
   // Set up middleware chain for redux dispatch.
   const history = createBrowserHistory();
   const historyMiddleware = createHistoryMiddleware(history);
-  const eventReporterMiddleware = createEventReporterMiddleware(eventHandler);
   const apiMiddleware = createApiMiddleware(services);
 
   const store = createStore(
@@ -99,7 +98,6 @@ const initialize = ({
         cacheMiddleware,
         apiMiddleware,
         historyMiddleware,
-        eventReporterMiddleware,
       )
     )
   );
@@ -150,14 +148,35 @@ const initialize = ({
 
   const appRootDOMNode = document.getElementById(rootId);
 
+  // Determine the analytics HoC we are going to use.
+  // The following allows the app to be more portable, cgov will
+  // default to using EDDL Analytics. Other sites could supplier
+  // their own custom handler.
+  const AnalyticsHoC = ({children}) => 
+    analyticsHandler === 'EddlAnalyticsHandler' ? 
+      ( 
+        <EddlAnalyticsProvider
+          pageLanguage={language === 'es' ? 'spanish' : 'english'}
+          // App Has no Audience
+          //pageChannel={analyticsChannel}
+          //pageContentGroup={dictionaryTitle}
+          //publishedDate={analyticsPublishedDate}
+        > {children} </EddlAnalyticsProvider>
+      ) :
+      ( <AnalyticsProvider
+          analyticsHandler={analyticsHandler}
+        >{children}</AnalyticsProvider>);
+
   const App = () => {
     return (
       <Provider store={ store }>
-        <ErrorBoundary dispatch={ store.dispatch }>
-          <NavigationHandler>
-            <Results title={ title } language={ language } />
-          </NavigationHandler>
-        </ErrorBoundary>
+        <AnalyticsHoC>
+          <ErrorBoundary dispatch={ store.dispatch }>
+            <NavigationHandler>
+              <Results title={ title } language={ language } />
+            </NavigationHandler>
+          </ErrorBoundary>
+        </AnalyticsHoC>
       </Provider>
     );
   };
